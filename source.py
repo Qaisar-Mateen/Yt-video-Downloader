@@ -22,16 +22,21 @@ def open_file_dialog():
     return folder
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    root.geometry("500x500")
-    pic_frame = tk.Frame(root , width=100, height=100, borderwidth=1, relief="groove")
-    pic_frame.pack(anchor="center", padx=10, pady=10)
     
-    video_url = input("Please enter a YouTube url: ")
-    save_dir = open_file_dialog()
+    root = tk.Tk()
+    root.geometry("500x350")
+    root.title("YouTube Video Downloader")
 
-    if save_dir:
-        print("Started download...")
-        download_video(video_url, save_dir)
-    else:
-        print("Invalid save location.")
+    pic_frame = tk.Frame(root , width=250, height=141, borderwidth=2, relief="ridge")
+    pic_frame.pack(anchor="center", padx=10, pady=10)
+    thumbnail = tk.PhotoImage(pic_frame, file="empty.png").pack()
+    root.mainloop()
+
+    # video_url = input("Please enter a YouTube url: ")
+    # save_dir = open_file_dialog()
+
+    # if save_dir:
+    #     print("Started download...")
+    #     download_video(video_url, save_dir)
+    # else:
+    #     print("Invalid save location.")
