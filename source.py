@@ -1,6 +1,5 @@
 from pytube import YouTube
 import tkinter as tk
-from tkinter import *
 from tkinter import filedialog
 
 res_stream = None
@@ -24,8 +23,10 @@ def open_file_dialog():
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.geometry("500x500")
+    pic_frame = tk.Frame(root , width=100, height=100, borderwidth=1, relief="groove")
+    pic_frame.pack(anchor="center", padx=10, pady=10)
     
-
     video_url = input("Please enter a YouTube url: ")
     save_dir = open_file_dialog()
 
