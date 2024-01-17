@@ -1,6 +1,6 @@
 from pytube import YouTube
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import SUNKEN, filedialog
 from PIL import ImageTk, Image
 
 res_stream = None
@@ -32,8 +32,10 @@ if __name__ == "__main__":
     root.geometry("500x350")
     root.title("YouTube Video Downloader")
 
+    frame = tk.Frame()
+
     # thumbnail frame
-    pic_frame = tk.Frame(root , width=250, height=141, borderwidth=2, relief="groove", bg="grey")
+    pic_frame = tk.Frame(root , width=250, height=141, borderwidth=2, relief="raised", bg="black")
     pic_frame.pack(anchor="center", padx=10, pady=10)
     img = Image.open("no image.png")
     img.thumbnail((250, 141), Image.LANCZOS)
