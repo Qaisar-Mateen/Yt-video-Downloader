@@ -47,7 +47,7 @@ if __name__ == "__main__":
     thumbnail = ImageTk.PhotoImage(img)
     thumbnail_label = tk.Label(pic_frame, image=thumbnail).pack()
 
-    input_frame = tk.Frame(frame, bg="blue").pack(anchor="center", fill=tk.X + tk.Y ,padx=10, pady=10)
+    input_frame = tk.Frame(frame, bg="blue").pack(anchor="center", fill=tk.X ,padx=10, pady=10)
     urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="sunken", text="Enter Youtube Video URL").pack(anchor="center", padx=10, pady=10)
     root.mainloop()
 
