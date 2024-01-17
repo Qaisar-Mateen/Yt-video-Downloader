@@ -3,6 +3,10 @@ from pytube import YouTube
 import tkinter as tk
 from tkinter import SUNKEN, filedialog
 from PIL import ImageTk, Image
+from PIL import Image
+import tkinter as tk
+from tkinter import filedialog
+from PIL import ImageTk
 
 res_stream = None
 
@@ -42,6 +46,8 @@ if __name__ == "__main__":
     img.thumbnail((250, 141), Image.LANCZOS)
     thumbnail = ImageTk.PhotoImage(img)
     thumbnail_label = tk.Label(pic_frame, image=thumbnail).pack()
+
+    input_frame = tk.Frame(frame, bg="blue").pack(anchor="center", fill=tk.X + tk.Y ,padx=10, pady=10)
 
     root.mainloop()
 
