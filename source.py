@@ -1,12 +1,7 @@
-from turtle import bgcolor
 from pytube import YouTube
 import tkinter as tk
-from tkinter import SUNKEN, filedialog
-from PIL import ImageTk, Image
-from PIL import Image
-import tkinter as tk
 from tkinter import filedialog
-from PIL import ImageTk
+from PIL import ImageTk, Image
 
 res_stream = None
 
@@ -37,7 +32,8 @@ if __name__ == "__main__":
     root.geometry("500x350")
     root.title("YouTube Video Downloader")
 
-    frame = tk.Frame(root,padx=20, pady=20, bg="red").pack()
+    frame = tk.Frame(root, padx=20, pady=20, background="blue")
+    frame.pack()
 
     # thumbnail frame
     pic_frame = tk.Frame(frame , width=250, height=141, borderwidth=2, relief="raised", bg="black")
@@ -47,8 +43,10 @@ if __name__ == "__main__":
     thumbnail = ImageTk.PhotoImage(img)
     thumbnail_label = tk.Label(pic_frame, image=thumbnail).pack()
 
-    input_frame = tk.Frame(frame, bg="blue").pack(anchor="center", fill=tk.X ,padx=10, pady=10)
-    urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="sunken", text="Enter Youtube Video URL").pack(anchor="center", padx=10, pady=10)
+    input_frame = tk.Frame(frame)
+    input_frame.pack(anchor="center", fill=tk.X ,padx=10, pady=10)
+    urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="groove")
+    urlbox.pack(anchor="center", padx=10, pady=10)
     root.mainloop()
 
     # video_url = input("Please enter a YouTube url: ")
