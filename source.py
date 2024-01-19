@@ -36,7 +36,7 @@ if __name__ == "__main__":
     frame.pack(fill=tk.BOTH, expand=True)
 
     # thumbnail frame
-    pic_frame = tk.Frame(frame , width=250, height=141, borderwidth=3, relief="raised", bg="black")
+    pic_frame = tk.Frame(frame , width=250, height=141, borderwidth=3, relief="flat", bg="black")
     pic_frame.pack(anchor="center", padx=10, pady=10)
     img = Image.open("no image.png")
     img.thumbnail((250, 141), Image.LANCZOS)
