@@ -33,7 +33,7 @@ if __name__ == "__main__":
     root.title("YouTube Video Downloader")
 
     frame = tk.Frame(root, padx=20, pady=20, background="blue")
-    frame.pack()
+    frame.pack(fill=tk.BOTH, expand=True)
 
     # thumbnail frame
     pic_frame = tk.Frame(frame , width=250, height=141, borderwidth=2, relief="raised", bg="black")
@@ -44,9 +44,9 @@ if __name__ == "__main__":
     thumbnail_label = tk.Label(pic_frame, image=thumbnail).pack()
 
     input_frame = tk.Frame(frame)
-    input_frame.pack(anchor="center", fill=tk.X ,padx=10, pady=10)
+    input_frame.pack(anchor="center")
     urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="groove")
-    urlbox.pack(anchor="center", padx=10, pady=10)
+    urlbox.pack(anchor="center")
     root.mainloop()
 
     # video_url = input("Please enter a YouTube url: ")
