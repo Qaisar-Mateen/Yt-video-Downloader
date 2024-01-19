@@ -36,7 +36,7 @@ if __name__ == "__main__":
     frame.pack(fill=tk.BOTH, expand=True)
 
     # thumbnail frame
-    pic_frame = tk.Frame(frame , width=250, height=141, borderwidth=2, relief="raised", bg="black")
+    pic_frame = tk.Frame(frame , width=250, height=141, borderwidth=3, relief="raised", bg="black")
     pic_frame.pack(anchor="center", padx=10, pady=10)
     img = Image.open("no image.png")
     img.thumbnail((250, 141), Image.LANCZOS)
@@ -44,9 +44,10 @@ if __name__ == "__main__":
     thumbnail_label = tk.Label(pic_frame, image=thumbnail).pack()
 
     input_frame = tk.Frame(frame)
-    input_frame.pack(anchor="center")
+    input_frame.pack(anchor="center", fill=tk.X ,padx=10, pady=10)
     urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="groove")
-    urlbox.pack(anchor="center")
+    urlbox.pack(anchor="center", padx=10, pady=10)
+
     root.mainloop()
 
     # video_url = input("Please enter a YouTube url: ")
