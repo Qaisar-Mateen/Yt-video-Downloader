@@ -48,6 +48,8 @@ if __name__ == "__main__":
     urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="groove")
     urlbox.pack(anchor="center", padx=10, pady=10)
 
+    # I have to add button.bind("<enter,leave>" for color change)
+
     root.mainloop()
 
     # video_url = input("Please enter a YouTube url: ")
