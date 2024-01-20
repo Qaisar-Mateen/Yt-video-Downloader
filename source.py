@@ -5,6 +5,9 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 
 res_stream = None
+button_mode = "Download"
+button_color = "#1F6AA5"
+button_color_hov = "#257EC3"
 
 def download_video(url, save_path):
     try:
@@ -32,7 +35,7 @@ if __name__ == "__main__":
 
     # root window settings
     root = ctk.CTk()
-    root.geometry("890x501")
+    root.geometry("900x506")
     root.title("YouTube Video Downloader")
 
     root.grid_columnconfigure(0, weight=1)
@@ -46,20 +49,20 @@ if __name__ == "__main__":
 
     # thumbnail image
     thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(250, 141))
-    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
+    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="", width=260, height=151)
+    # thumbnail_image_label.configure(bg_color="#1F1F1F",corner_radius=15)
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
 
     # input frame
     input_frame = ctk.CTkFrame(root)
     input_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=(5,30))
+    input_frame.grid_columnconfigure((0,1), weight=1)
 
-    # input_frame = tk.Frame(frame)
-    # input_frame.pack(anchor="center", fill=tk.X ,padx=10, pady=10)
-    # urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="groove")
-    # urlbox.pack(anchor="center", padx=10, pady=10)
+    url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=450)
+    url.grid(row=0, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
 
-    but = ctk.CTkButton(input_frame, fg_color="#FF0000", hover_color="#333333")#, active_color="#4d4d4d", width=20, height=2, borderwidth=0)
-    but.grid(row=0, column=0, sticky="s", padx=40, pady=40)
+    but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color)
+    but.grid(row=0, column=1, sticky="", padx=(0, 10), pady=(15, 5))
 
     root.mainloop()
 
