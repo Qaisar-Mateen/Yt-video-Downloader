@@ -36,6 +36,8 @@ if __name__ == "__main__":
     # root window settings
     root = ctk.CTk()
     root.geometry("900x506")
+    root.resizable(False, False)
+    root.iconbitmap("icon1.ico")
     root.title("YouTube Video Downloader")
 
     root.grid_columnconfigure(0, weight=1)
