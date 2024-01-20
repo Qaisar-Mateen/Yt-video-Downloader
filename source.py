@@ -1,8 +1,12 @@
-from pytube import YouTube
-#import tkinter as tk
 import customtkinter as ctk
+import urllib.request
+from pytube import YouTube
 from tkinter import filedialog
-from PIL import ImageTk, Image
+from PIL import Image
+from io import BytesIO
+
+my_url = "https://www.tutorialspoint.com/images/logo.png"
+
 
 res_stream = None
 thumbnail_image = None
@@ -17,10 +21,12 @@ button_color_hov = "#257EC3"
 def fetch_Data(yt_url):
     try:
         yt = YouTube(yt_url)
-        global resulations
+        global resulations, title
+    
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             resulations = steam.resolution
-            print(resulations)
+    
+        title = yt.title
 
     except Exception as e:
         print(e)
@@ -62,12 +68,13 @@ if __name__ == "__main__":
     # thumbnail frame
     pic_frame = ctk.CTkFrame(root, width=260, height=151)
     pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
-
+    
     # thumbnail image
-    thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(250, 141))
-    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="", width=260, height=151)
+    thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(280, 157))
+    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
     # thumbnail_image_label.configure(bg_color="#1F1F1F",corner_radius=15)
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
+    
 
     # input frame
     input_frame = ctk.CTkFrame(root)
