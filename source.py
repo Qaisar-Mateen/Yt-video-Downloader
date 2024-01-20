@@ -5,22 +5,38 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 
 res_stream = None
-button_mode = "Download"
+thumbnail_image = None
+thumbnail_image_label = None
+url = None
+
+button_mode = "Fetch"
 button_color = "#1F6AA5"
 button_color_hov = "#257EC3"
 
-def download_video(url, save_path):
-    try:
-        yt = YouTube(url)
-        streams = yt.streams.filter(progressive=True, file_extension="mp4")
-        res_stream = streams.get_highest_resolution()
-        
-        if res_stream:
-            res_stream.download(output_path=save_path)
 
-        print("Video downloaded successfully!")
+def fetch_Data(yt_url):
+    try:
+        yt = YouTube(yt_url)
+        global resulations
+        for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
+            resulations = steam.resolution
+            print(resulations)
+
     except Exception as e:
         print(e)
+
+# def download_video(url, save_path):
+#     try:
+#         yt = YouTube(url)
+#         streams = yt.streams.filter(progressive=True, file_extension="mp4")
+#         res_stream = streams.get_highest_resolution()
+        
+#         if res_stream:
+#             res_stream.download(output_path=save_path)
+
+#         print("Video downloaded successfully!")
+#     except Exception as e:
+#         print(e)
 
 def open_file_dialog():
     folder = filedialog.askdirectory()
@@ -37,13 +53,11 @@ if __name__ == "__main__":
     root = ctk.CTk()
     root.geometry("900x506")
     root.resizable(False, False)
-    root.iconbitmap("icon1.ico")
+    root.iconbitmap("icon.ico")
     root.title("YouTube Video Downloader")
 
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(1, weight=1)
-    # frame = ctk.CTkFrame(root)
-    # frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
     # thumbnail frame
     pic_frame = ctk.CTkFrame(root, width=260, height=151)
@@ -63,8 +77,10 @@ if __name__ == "__main__":
     url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=450)
     url.grid(row=0, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
 
-    but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color)
-    but.grid(row=0, column=1, sticky="", padx=(0, 10), pady=(15, 5))
+    but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=lambda: fetch_Data(url.get()))
+    but.grid(row=0, column=1, padx=(0, 10), pady=(15, 5))
+
+
 
     root.mainloop()
 
