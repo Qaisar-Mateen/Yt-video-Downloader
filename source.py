@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     # thumbnail image
     thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(250, 141))
-    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image)
+    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
 
     # input frame
@@ -58,8 +58,8 @@ if __name__ == "__main__":
     # urlbox = tk.Entry(input_frame, width=50, borderwidth=2, relief="groove")
     # urlbox.pack(anchor="center", padx=10, pady=10)
 
-    # but = ctk.CTkButton(input_frame, text="Download")
-    # but.grid(row=0, column=0, sticky="s", padx=40, pady=40)
+    but = ctk.CTkButton(input_frame, fg_color="#FF0000", hover_color="#333333")#, active_color="#4d4d4d", width=20, height=2, borderwidth=0)
+    but.grid(row=0, column=0, sticky="s", padx=40, pady=40)
 
     root.mainloop()
 
