@@ -74,6 +74,8 @@ if __name__ == "__main__":
     thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
     # thumbnail_image_label.configure(bg_color="#1F1F1F",corner_radius=15)
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
+
+    detail_frame= ctk.CTkFrame(pic_frame, )
     
 
     # input frame
