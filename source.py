@@ -28,13 +28,18 @@ def open_file_dialog():
 
 if __name__ == "__main__":
     
+    ctk._set_appearance_mode("dark")
+    ctk.set_default_color_theme("dark")
     # root window settings
-    root = tk.Tk()
+    root = ctk.CTk()
     root.geometry("500x350")
     root.title("YouTube Video Downloader")
 
-    frame = tk.Frame(root, padx=20, pady=20, background="blue")
+    frame = ctk.CTkFrame(root)
     frame.pack(fill=tk.BOTH, expand=True)
+
+    but = ctk.CTkButton(master=frame, text="Download", command=lambda: download_video(urlbox.get(), open_file_dialog()))
+    but.pack(anchor="center", padx=10, pady=10)
 
     # thumbnail frame
     pic_frame = tk.Frame(frame , width=250, height=141, borderwidth=3, relief="flat", bg="black")
