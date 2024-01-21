@@ -1,4 +1,5 @@
 from os import system
+import re
 from time import sleep
 import requests
 import time
@@ -40,27 +41,73 @@ def open_file_dialog():
 
     return folder
 
-def update_window(title, author, publish_date, thumbnail_url, resulations):
+def empty_window():
+    
+    global detail_frame, pic_frame
+    
+    # thumbnail frame
+    pic_frame = ctk.CTkFrame(root)
+    pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
+
+    # thumbnail image
+    thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(280, 157))
+    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
+    thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
+
+    # detail frame
+    detail_frame= ctk.CTkFrame(pic_frame)
+    detail_frame.grid(row=0, column=1, pady=25, padx=25, rowspan=2)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=189, height=23).grid(row=0, column=0, sticky="w", padx=10, pady=10, columnspan=2)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=3, column=0, sticky="w", padx=10, pady=10)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=3, column=1, sticky="w", padx=10, pady=10)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=248, height=23).grid(row=2, column=0, sticky="w", padx=10, pady=10, columnspan=2)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=1, column=1, sticky="w", padx=10, pady=10)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=1, column=0, sticky="w", padx=10, pady=10)
+
+
+def update_window(title, author, publish_date, thumbnail_url, avail_resolutions):
     
     button_mode = "Cancel"
-    button_color = "#1F6AA5"
-    button_color_hov = "#257EC3"
+    button_color = "#E20000"
+    button_color_hov = "red"
 
     thumbnail_image = ctk.CTkImage(Image.open(requests.get(thumbnail_url, stream=True).raw), size=(280, 157))
     thumbnail_image_label.configure(image=thumbnail_image)
     thumbnail_image_label.update()
 
+    global detail_frame, pic_frame, resulation
+    
+    resolution = ctk.IntVar()
+
+    # cleaning frame
     detail_frame.destroy()
     detail_frame= ctk.CTkFrame(pic_frame)
     detail_frame.grid(row=0, column=1, pady=25, padx=25, rowspan=1)
-    ctk.CTkLabel(detail_frame, text="Title: " + title).grid(row=0, column=0, padx=15, pady=5)
-    ctk.CTkLabel(detail_frame, text="Channel: " + author).grid(row=1, column=0, padx=15, pady=5)
-    ctk.CTkLabel(detail_frame, text="Publish Date: " + str(publish_date)).grid(row=2, column=0, padx=15, pady=5)
-    ctk.CTkLabel(detail_frame, text="Resulation: " + str(resulations)).grid(row=3, column=0, padx=15, pady=5)
+    
+    # adding video detail to the frame
+    ctk.CTkLabel(detail_frame, text="TITLE: " + title).grid(row=0, column=0, padx=15, pady=5, sticky="w")
+    ctk.CTkLabel(detail_frame, text="CHANNEL: " + author).grid(row=1, column=0, padx=15, pady=5, sticky="w")
+    ctk.CTkLabel(detail_frame, text="PUBLISH DATE: " + str(publish_date)).grid(row=2, column=0, padx=15, pady=5, sticky="w")
+    ctk.CTkComboBox(detail_frame, values=avail_resolutions, dropdown_hover_color="#257EC3", variable=resolution, button_hover_color="#257EC3", button_color="#1F6AA5", border_color="#1F6AA5").grid(row=3, column=0, padx=15, pady=5)
+    resolution.set("Select Resolution")
     detail_frame.update()
 
-    but.configure(text=button_mode, hover_color=button_color_hov, fg_color=button_color, state="normal")
+    but.configure(text=button_mode, hover_color=button_color_hov, fg_color=button_color, state="normal", command=cancel)
     but.update()
+
+def cancel():
+    button_mode = "Fetch"
+    button_color = "#1F6AA5"
+    button_color_hov = "#257EC3"
+
+    but.configure(text=button_mode, hover_color=button_color_hov, fg_color=button_color, state="normal", command=fetch)
+    but.update()
+
+    url.delete(0, "end")
+    url.configure(state="normal")
+    url.update()
+
+    empty_window()
 
 def fetch_Data(yt_url):
     try:
@@ -69,14 +116,14 @@ def fetch_Data(yt_url):
         yt = YouTube(yt_url)
         url.configure(state="disabled")
         url.update()
-        global resulation, size
+        
+        avail_resolutions = []
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
-            resulations = steam.resolution
-            size = steam.filesize
+            avail_resolutions.append(str(steam.resolution))
         
         print("TIME: " + str(time.time()-start_time))
-
-        update_window(yt.title, yt.author, yt.publish_date, yt.thumbnail_url, resulations)
+        publish_date_str = yt.publish_date.strftime("%d/%m/%Y")
+        update_window(yt.title, yt.author, publish_date_str, yt.thumbnail_url, avail_resolutions)
     except Exception as e:
         print(e)
         but.configure(text="Fetch", state="normal")
@@ -117,12 +164,6 @@ if __name__ == "__main__":
     ctk.CTkFrame(detail_frame, corner_radius=15, width=248, height=23).grid(row=2, column=0, sticky="w", padx=10, pady=10, columnspan=2)
     ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=1, column=1, sticky="w", padx=10, pady=10)
     ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=1, column=0, sticky="w", padx=10, pady=10)
-    
-    # title frame
-    # title_frame = ctk.CTkFrame(pic_frame, corner_radius=10)
-    # title_frame.grid(row=1, column=0, pady=(0, 15), padx=15)
-    # ctk.CTkLabel(title_frame, text="Title: this is video title").grid(row=0, column=0, padx=15, pady=5)
-
 
     # input frame
     input_frame = ctk.CTkFrame(root)
