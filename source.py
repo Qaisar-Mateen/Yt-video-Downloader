@@ -1,20 +1,20 @@
 from os import system
 from time import sleep
+import requests
 import time
-from tracemalloc import start
 import customtkinter as ctk
-import urllib.request
 from pytube import YouTube
 from tkinter import filedialog
 from PIL import Image
-from io import BytesIO
+
 
 thumbnail_image = None
 thumbnail_image_label = None
 url = None
 but = None
+detail_frame = None
+pic_frame = None
 
-Fetching = False
 button_mode = "Fetch"
 button_color = "#1F6AA5"
 button_color_hov = "#257EC3"
@@ -40,6 +40,28 @@ def open_file_dialog():
 
     return folder
 
+def update_window(title, author, publish_date, thumbnail_url, resulations):
+    
+    button_mode = "Cancel"
+    button_color = "#1F6AA5"
+    button_color_hov = "#257EC3"
+
+    thumbnail_image = ctk.CTkImage(Image.open(requests.get(thumbnail_url, stream=True).raw), size=(280, 157))
+    thumbnail_image_label.configure(image=thumbnail_image)
+    thumbnail_image_label.update()
+
+    detail_frame.destroy()
+    detail_frame= ctk.CTkFrame(pic_frame)
+    detail_frame.grid(row=0, column=1, pady=25, padx=25, rowspan=1)
+    ctk.CTkLabel(detail_frame, text="Title: " + title).grid(row=0, column=0, padx=15, pady=5)
+    ctk.CTkLabel(detail_frame, text="Channel: " + author).grid(row=1, column=0, padx=15, pady=5)
+    ctk.CTkLabel(detail_frame, text="Publish Date: " + str(publish_date)).grid(row=2, column=0, padx=15, pady=5)
+    ctk.CTkLabel(detail_frame, text="Resulation: " + str(resulations)).grid(row=3, column=0, padx=15, pady=5)
+    detail_frame.update()
+
+    but.configure(text=button_mode, hover_color=button_color_hov, fg_color=button_color, state="normal")
+    but.update()
+
 def fetch_Data(yt_url):
     try:
         start_time = time.time()
@@ -51,9 +73,10 @@ def fetch_Data(yt_url):
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             resulations = steam.resolution
             size = steam.filesize
-            print(resulations, size)
+        
         print("TIME: " + str(time.time()-start_time))
-        #update_window(yt.title, yt.author, yt.publish_date, yt.thumbnail_url, resulations)
+
+        update_window(yt.title, yt.author, yt.publish_date, yt.thumbnail_url, resulations)
     except Exception as e:
         print(e)
         but.configure(text="Fetch", state="normal")
