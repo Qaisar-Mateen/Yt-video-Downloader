@@ -42,7 +42,8 @@ def open_file_dialog():
     return folder
 
 def empty_window():
-    
+    global detail_frame, pic_frame, thumbnail_image, thumbnail_image_label
+
     if(pic_frame):
         pic_frame.destroy()
     if(detail_frame):
@@ -107,9 +108,9 @@ def cancel():
     but.configure(text=button_mode, hover_color=button_color_hov, fg_color=button_color, state="normal", command=fetch)
     but.update()
 
-    url.delete(0, "end")
     url.configure(state="normal")
     url.update()
+    url.delete(0, "end")
 
     empty_window()
 
