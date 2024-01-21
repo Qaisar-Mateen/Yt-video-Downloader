@@ -1,3 +1,4 @@
+from time import sleep
 import customtkinter as ctk
 import urllib.request
 from pytube import YouTube
@@ -5,31 +6,14 @@ from tkinter import filedialog
 from PIL import Image
 from io import BytesIO
 
-my_url = "https://www.tutorialspoint.com/images/logo.png"
-
-
-res_stream = None
 thumbnail_image = None
 thumbnail_image_label = None
 url = None
+but = None
 
 button_mode = "Fetch"
 button_color = "#1F6AA5"
 button_color_hov = "#257EC3"
-
-
-def fetch_Data(yt_url):
-    try:
-        yt = YouTube(yt_url)
-        global resulations, title
-    
-        for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
-            resulations = steam.resolution
-    
-        title = yt.title
-
-    except Exception as e:
-        print(e)
 
 # def download_video(url, save_path):
 #     try:
@@ -51,6 +35,31 @@ def open_file_dialog():
 
     return folder
 
+def fetch_Data(yt_url):
+    try:
+        print("Fetching data...")
+        yt = YouTube(yt_url)
+        url.configure(state="disabled")
+
+        global resulations, title, channel, pub_date, img_url
+    
+        for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
+            resulations = steam.resolution
+            
+        channel = yt.author
+        pub_date = yt.publish_date
+        img_url = yt.thumbnail_url
+        title = yt.title
+
+    except Exception as e:
+        print(e)
+
+def wrapper_fetch_Data(yt_url):
+    but.configure(text="Fetching...")
+    sleep(1)
+    fetch_Data(yt_url)
+    but.configure(text=button_mode)
+
 if __name__ == "__main__":
     
     ctk.set_appearance_mode("dark")
@@ -66,7 +75,7 @@ if __name__ == "__main__":
     root.grid_rowconfigure(1, weight=1)
 
     # thumbnail frame
-    pic_frame = ctk.CTkFrame(root, width=260, height=151)
+    pic_frame = ctk.CTkFrame(root)
     pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
     
     # thumbnail image
@@ -75,7 +84,9 @@ if __name__ == "__main__":
     # thumbnail_image_label.configure(bg_color="#1F1F1F",corner_radius=15)
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
 
-    detail_frame= ctk.CTkFrame(pic_frame, )
+    detail_frame= ctk.CTkFrame(pic_frame)
+    detail_frame.grid(row=0, column=1)
+    
     
 
     # input frame
@@ -86,7 +97,7 @@ if __name__ == "__main__":
     url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=450)
     url.grid(row=0, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
 
-    but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=lambda: fetch_Data(url.get()))
+    but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=lambda: wrapper_fetch_Data(url.get()))
     but.grid(row=0, column=1, padx=(0, 10), pady=(15, 5))
 
 
