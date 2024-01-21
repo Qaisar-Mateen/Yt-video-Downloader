@@ -77,18 +77,18 @@ if __name__ == "__main__":
     # thumbnail frame
     pic_frame = ctk.CTkFrame(root)
     pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
-    
+    pic_frame.grid_rowconfigure(0, weight=1)
     # thumbnail image
     thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(280, 157))
     thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
-    # thumbnail_image_label.configure(bg_color="#1F1F1F",corner_radius=15)
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
 
     detail_frame= ctk.CTkFrame(pic_frame)
     detail_frame.grid(row=0, column=1)
     
-    
-
+    title_frame = ctk.CTkFrame(pic_frame)
+    title_frame.grid(row=1, column=0, pady=(0, 15), padx=15)
+    ctk.CTkLabel(title_frame, text="Title: this is video title", corner_radius=15).grid(row=0, column=0, padx=5, pady=5)
     # input frame
     input_frame = ctk.CTkFrame(root)
     input_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=(5,30))
