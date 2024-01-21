@@ -16,6 +16,7 @@ button_mode = "Fetch"
 button_color = "#1F6AA5"
 button_color_hov = "#257EC3"
 
+
 # def download_video(url, save_path):
 #     try:
 #         yt = YouTube(url)
@@ -67,7 +68,6 @@ if __name__ == "__main__":
     # root window settings
     root = ctk.CTk()
     root.geometry("900x506")
-    root.resizable(False, False)
     root.iconbitmap("icon.ico")
     root.title("YouTube Video Downloader")
 
