@@ -43,8 +43,11 @@ def open_file_dialog():
 
 def empty_window():
     
-    global detail_frame, pic_frame
-    
+    if(pic_frame):
+        pic_frame.destroy()
+    if(detail_frame):
+        detail_frame.destroy()
+
     # thumbnail frame
     pic_frame = ctk.CTkFrame(root)
     pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
@@ -57,6 +60,7 @@ def empty_window():
     # detail frame
     detail_frame= ctk.CTkFrame(pic_frame)
     detail_frame.grid(row=0, column=1, pady=25, padx=25, rowspan=2)
+    # skeleton
     ctk.CTkFrame(detail_frame, corner_radius=15, width=189, height=23).grid(row=0, column=0, sticky="w", padx=10, pady=10, columnspan=2)
     ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=3, column=0, sticky="w", padx=10, pady=10)
     ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=3, column=1, sticky="w", padx=10, pady=10)
@@ -146,24 +150,7 @@ if __name__ == "__main__":
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(1, weight=1)
 
-    # thumbnail frame
-    pic_frame = ctk.CTkFrame(root)
-    pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
-    
-    # thumbnail image
-    thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(280, 157))
-    thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
-    thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
-
-    # detail frame
-    detail_frame= ctk.CTkFrame(pic_frame)
-    detail_frame.grid(row=0, column=1, pady=25, padx=25, rowspan=2)
-    ctk.CTkFrame(detail_frame, corner_radius=15, width=189, height=23).grid(row=0, column=0, sticky="w", padx=10, pady=10, columnspan=2)
-    ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=3, column=0, sticky="w", padx=10, pady=10)
-    ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=3, column=1, sticky="w", padx=10, pady=10)
-    ctk.CTkFrame(detail_frame, corner_radius=15, width=248, height=23).grid(row=2, column=0, sticky="w", padx=10, pady=10, columnspan=2)
-    ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=1, column=1, sticky="w", padx=10, pady=10)
-    ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=1, column=0, sticky="w", padx=10, pady=10)
+    empty_window()
 
     # input frame
     input_frame = ctk.CTkFrame(root)
