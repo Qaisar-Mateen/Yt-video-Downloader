@@ -1,4 +1,7 @@
+from os import system
 from time import sleep
+import time
+from tracemalloc import start
 import customtkinter as ctk
 import urllib.request
 from pytube import YouTube
@@ -38,28 +41,27 @@ def open_file_dialog():
     return folder
 
 def fetch_Data(yt_url):
-    Fetching = False
     try:
+        start_time = time.time()
+        print('fetching...')
         yt = YouTube(yt_url)
         url.configure(state="disabled")
-
-        global resulations, title, channel, pub_date, img_url
-    
+        url.update()
+        global resulation, size
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             resulations = steam.resolution
-
-        channel = yt.author
-        pub_date = yt.publish_date
-        img_url = yt.thumbnail_url
-        title = yt.title
-
+            size = steam.filesize
+            print(resulations, size)
+        print("TIME: " + str(time.time()-start_time))
+        #update_window(yt.title, yt.author, yt.publish_date, yt.thumbnail_url, resulations)
     except Exception as e:
         print(e)
         but.configure(text="Fetch", state="normal")
-
-def fetch_callback():
-    Fetching = True
+    
+def fetch():
     but.configure(text="Fetching...", state="disabled")
+    but.update()
+    fetch_Data(url.get())
 
 if __name__ == "__main__":
     
@@ -86,11 +88,17 @@ if __name__ == "__main__":
     # detail frame
     detail_frame= ctk.CTkFrame(pic_frame)
     detail_frame.grid(row=0, column=1, pady=25, padx=25, rowspan=2)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=189, height=23).grid(row=0, column=0, sticky="w", padx=10, pady=10, columnspan=2)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=3, column=0, sticky="w", padx=10, pady=10)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=3, column=1, sticky="w", padx=10, pady=10)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=248, height=23).grid(row=2, column=0, sticky="w", padx=10, pady=10, columnspan=2)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=1, column=1, sticky="w", padx=10, pady=10)
+    ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=1, column=0, sticky="w", padx=10, pady=10)
     
     # title frame
-    title_frame = ctk.CTkFrame(pic_frame, corner_radius=10)
-    title_frame.grid(row=1, column=0, pady=(0, 15), padx=15)
-    ctk.CTkLabel(title_frame, text="Title: this is video title").grid(row=0, column=0, padx=15, pady=5)
+    # title_frame = ctk.CTkFrame(pic_frame, corner_radius=10)
+    # title_frame.grid(row=1, column=0, pady=(0, 15), padx=15)
+    # ctk.CTkLabel(title_frame, text="Title: this is video title").grid(row=0, column=0, padx=15, pady=5)
 
 
     # input frame
@@ -101,10 +109,9 @@ if __name__ == "__main__":
     url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=450)
     url.grid(row=0, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
 
-    but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=fetch_callback)
+    but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=fetch)
     but.grid(row=0, column=1, padx=(0, 10), pady=(15, 5))
-    if(Fetching == True):
-        fetch_Data(url.get())
+    
 
     root.mainloop()
 
