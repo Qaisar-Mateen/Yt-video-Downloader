@@ -74,7 +74,7 @@ def empty_window():
 
 def update_size(choice):
     global size_str, filesize, avail_resolutions, size_label
-    size_str = "SIZE: " + str(filesize[choice]) + " MB"
+    size_str = "SIZE: " + str(filesize[avail_resolutions.index(choice)]) + " MB"
     size_label.configure(text=size_str)
     size_label.update()
 
@@ -146,8 +146,8 @@ def fetch_Data(yt_url):
         avail_resolutions = []
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             avail_resolutions.append(str(steam.resolution))
-            filesize.append((steam.filesize / (1024*1024)))
-        
+            filesize.append(format(steam.filesize / (1024*1024), '.2f'))
+        print(filesize)
         print("TIME: " + str(time.time()-start_time))
         publish_date_str = yt.publish_date.strftime("%d/%m/%Y")
         update_window(yt.title, yt.author, publish_date_str, yt.thumbnail_url, avail_resolutions)
