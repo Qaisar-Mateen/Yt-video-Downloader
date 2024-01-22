@@ -84,7 +84,7 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     thumbnail_image_label.configure(image=thumbnail_image)
     thumbnail_image_label.update()
 
-    global detail_frame, pic_frame, resulation
+    global detail_frame, pic_frame, resulation, combobox
     
     resolution = ctk.IntVar()
 
@@ -97,7 +97,10 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     ctk.CTkLabel(detail_frame, text="TITLE: " + title).grid(row=0, column=0, padx=15, pady=5, sticky="w")
     ctk.CTkLabel(detail_frame, text="CHANNEL: " + author).grid(row=1, column=0, padx=15, pady=5, sticky="w")
     ctk.CTkLabel(detail_frame, text="PUBLISH DATE: " + str(publish_date)).grid(row=2, column=0, padx=15, pady=5, sticky="w")
-    ctk.CTkComboBox(detail_frame, values=avail_resolutions, command=update_size, dropdown_hover_color="#257EC3", variable=resolution, button_hover_color="#257EC3", button_color="#1F6AA5", border_color="#1F6AA5").grid(row=3, column=0, padx=15, pady=5)
+    ctk.CTkLabel(detail_frame, text=size_str).grid(row=3, column=0, padx=15, pady=5, sticky="w")
+    combobox = ctk.CTkComboBox(detail_frame, values=avail_resolutions, command=update_size, variable=resolution)
+    combobox.configure(dropdown_hover_color="#257EC3", button_color="#1F6AA5", border_color="#1F6AA5", button_hover_color="#257EC3")
+    combobox.grid(row=4, column=0, padx=15, pady=5)
     resolution.set("Select Resolution")
     detail_frame.update()
 
@@ -129,13 +132,15 @@ def fetch_Data(yt_url):
         avail_resolutions = []
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             avail_resolutions.append(str(steam.resolution))
-            filesize.append(steam.resoluion.filesize)
+            filesize.append((steam.filesize / (1024*1024)))
         
         print("TIME: " + str(time.time()-start_time))
         publish_date_str = yt.publish_date.strftime("%d/%m/%Y")
         update_window(yt.title, yt.author, publish_date_str, yt.thumbnail_url, avail_resolutions)
+
     except Exception as e:
         print(e)
+        url.configure(state="normal")
         but.configure(text="Fetch", state="normal")
     
 def fetch():
