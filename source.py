@@ -16,6 +16,8 @@ but = None
 detail_frame = None
 pic_frame = None
 
+filesize = []
+size_str = "SIZE: - MB"
 button_mode = "Fetch"
 button_color = "#1F6AA5"
 button_color_hov = "#257EC3"
@@ -69,6 +71,8 @@ def empty_window():
     ctk.CTkFrame(detail_frame, corner_radius=15, width=120, height=23).grid(row=1, column=1, sticky="w", padx=10, pady=10)
     ctk.CTkFrame(detail_frame, corner_radius=15, width=86, height=23).grid(row=1, column=0, sticky="w", padx=10, pady=10)
 
+def update_size():
+    global size
 
 def update_window(title, author, publish_date, thumbnail_url, avail_resolutions):
     
@@ -93,7 +97,7 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     ctk.CTkLabel(detail_frame, text="TITLE: " + title).grid(row=0, column=0, padx=15, pady=5, sticky="w")
     ctk.CTkLabel(detail_frame, text="CHANNEL: " + author).grid(row=1, column=0, padx=15, pady=5, sticky="w")
     ctk.CTkLabel(detail_frame, text="PUBLISH DATE: " + str(publish_date)).grid(row=2, column=0, padx=15, pady=5, sticky="w")
-    ctk.CTkComboBox(detail_frame, values=avail_resolutions, dropdown_hover_color="#257EC3", variable=resolution, button_hover_color="#257EC3", button_color="#1F6AA5", border_color="#1F6AA5").grid(row=3, column=0, padx=15, pady=5)
+    ctk.CTkComboBox(detail_frame, values=avail_resolutions, command=update_size, dropdown_hover_color="#257EC3", variable=resolution, button_hover_color="#257EC3", button_color="#1F6AA5", border_color="#1F6AA5").grid(row=3, column=0, padx=15, pady=5)
     resolution.set("Select Resolution")
     detail_frame.update()
 
@@ -125,6 +129,7 @@ def fetch_Data(yt_url):
         avail_resolutions = []
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             avail_resolutions.append(str(steam.resolution))
+            filesize.append(steam.resoluion.filesize)
         
         print("TIME: " + str(time.time()-start_time))
         publish_date_str = yt.publish_date.strftime("%d/%m/%Y")
