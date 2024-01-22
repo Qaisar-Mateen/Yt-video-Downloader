@@ -147,7 +147,7 @@ def fetch_Data(yt_url):
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             avail_resolutions.append(str(steam.resolution))
             filesize.append(format(steam.filesize / (1024*1024), '.2f'))
-        print(filesize)
+
         print("TIME: " + str(time.time()-start_time))
         publish_date_str = yt.publish_date.strftime("%d/%m/%Y")
         update_window(yt.title, yt.author, publish_date_str, yt.thumbnail_url, avail_resolutions)
