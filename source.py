@@ -87,7 +87,9 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     button_color = "#E20000"
     button_color_hov = "red"
 
-    thumbnail_image = ctk.CTkImage(Image.open(requests.get(thumbnail_url, stream=True).raw), size=(280, 157))
+    img = Image.open(requests.get(thumbnail_url, stream=True).raw)
+    img = img.resize=((280, 157), Image.LANCZOS)
+    thumbnail_image = ctk.CTkImage(img)
     thumbnail_image_label.configure(image=thumbnail_image)
     thumbnail_image_label.update()
 
