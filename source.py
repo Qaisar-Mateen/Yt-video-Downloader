@@ -1,3 +1,4 @@
+from hmac import new
 import threading
 from time import sleep
 import requests
@@ -105,15 +106,13 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     new_width = 280
     new_height = round(new_width / aspect_ratio)
 
-    # If the calculated height is greater than the desired height, recalculate the width instead
-    if new_height > 157:
+    # If the calculated height is greater than the upper limit of height, recalculate the width instead
+    if new_height > 163:
         new_height = 157
         new_width = round(new_height * aspect_ratio)
 
     # Resize the image to the new size
-    img = img.resize((new_width, new_height), Image.LANCZOS)
-
-    thumbnail_image = ctk.CTkImage(img)
+    thumbnail_image = ctk.CTkImage(Image.open(requests.get(thumbnail_url, stream=True).raw), size=(new_width, new_height))
     thumbnail_image_label.configure(image=thumbnail_image)
     thumbnail_image_label.update()
     
