@@ -142,7 +142,6 @@ def fetch_Data(yt_url):
         url.update()
         
         global avail_resolutions
-        global filesize
         avail_resolutions = []
         for steam in yt.streams.filter(progressive=True, file_extension="mp4"):
             avail_resolutions.append(str(steam.resolution))
