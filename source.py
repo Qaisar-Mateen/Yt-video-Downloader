@@ -95,9 +95,16 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     
     img = Image.open(requests.get(thumbnail_url, stream=True).raw)
     img.thumbnail((280, 157), Image.LANCZOS)
+
     thumbnail_image = ctk.CTkImage(img)
     thumbnail_image_label.configure(image=thumbnail_image)
     thumbnail_image_label.update()
+
+    # img = Image.open(requests.get(thumbnail_url, stream=True).raw)
+    # img.thumbnail((280, 157), Image.LANCZOS)
+    # thumbnail_image = ctk.CTkImage(img)
+    #thumbnail_image_label.configure(image=thumbnail_image)
+    #thumbnail_image_label.update()
 
     global detail_frame, pic_frame, resulation, combobox, size_label
     
