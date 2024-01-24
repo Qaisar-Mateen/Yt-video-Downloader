@@ -138,6 +138,7 @@ def fetch_Data(yt_url):
         start_time = time.time()
         print('fetching...')
         yt = YouTube(yt_url)
+        print("TIME: " + str(time.time()-start_time))
         url.configure(state="disabled")
         url.update()
         
