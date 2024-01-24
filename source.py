@@ -169,7 +169,7 @@ def fetch_Data(yt_url):
             avail_resolutions.append(str(steam.resolution))
             filesize.append(format(steam.filesize / (1024*1024), '.2f'))
 
-        print("TIME: " + str(time.time()-start_time))
+        print("TIME: " + str(time.time()-start_time)+"\n " + str(avail_resolutions) + "\n" + str(yt.thumbnail_url))
         publish_date_str = yt.publish_date.strftime("%d/%m/%Y")
         update_window(yt.title, yt.author, publish_date_str, yt.thumbnail_url, avail_resolutions)
 
