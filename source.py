@@ -91,6 +91,7 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
 
     # thumbnail_image = ctk.CTkImage(Image.open(requests.get(thumbnail_url, stream=True).raw), size=(280, 157))
     # thumbnail_image_label.configure(image=thumbnail_image)
+    
     # thumbnail_image_label.update()
     
     img = Image.open(requests.get(thumbnail_url, stream=True).raw)
