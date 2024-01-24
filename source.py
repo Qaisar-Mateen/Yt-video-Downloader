@@ -89,23 +89,34 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     button_color = "#E20000"
     button_color_hov = "red"
 
-    # thumbnail_image = ctk.CTkImage(Image.open(requests.get(thumbnail_url, stream=True).raw), size=(280, 157))
+    
+    # img = Image.open(requests.get(thumbnail_url, stream=True).raw)
+    # img.thumbnail((280, 157), Image.LANCZOS)
+
+    # thumbnail_image = ctk.CTkImage(img)
     # thumbnail_image_label.configure(image=thumbnail_image)
     # thumbnail_image_label.update()
-    
     img = Image.open(requests.get(thumbnail_url, stream=True).raw)
-    img.thumbnail((280, 157), Image.LANCZOS)
+
+    # Calculate the aspect ratio of the image
+    aspect_ratio = img.width / img.height
+
+    # Calculate the new size that maintains the aspect ratio
+    new_width = 280
+    new_height = round(new_width / aspect_ratio)
+
+    # If the calculated height is greater than the desired height, recalculate the width instead
+    if new_height > 157:
+        new_height = 157
+        new_width = round(new_height * aspect_ratio)
+
+    # Resize the image to the new size
+    img = img.resize((new_width, new_height), Image.LANCZOS)
 
     thumbnail_image = ctk.CTkImage(img)
     thumbnail_image_label.configure(image=thumbnail_image)
     thumbnail_image_label.update()
-
-    # img = Image.open(requests.get(thumbnail_url, stream=True).raw)
-    # img.thumbnail((280, 157), Image.LANCZOS)
-    # thumbnail_image = ctk.CTkImage(img)
-    #thumbnail_image_label.configure(image=thumbnail_image)
-    #thumbnail_image_label.update()
-
+    
     global detail_frame, pic_frame, resulation, combobox, size_label
     
     resolution = ctk.IntVar()
