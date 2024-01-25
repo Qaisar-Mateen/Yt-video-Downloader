@@ -145,6 +145,11 @@ def cancel():
     button_color = "#1F6AA5"
     button_color_hov = "#257EC3"
 
+    global filesize, avail_resolutions
+    filesize.clear()
+    avail_resolutions.clear()
+    size_str = "SIZE: - MB"
+
     but.configure(text=button_mode, hover_color=button_color_hov, fg_color=button_color, state="normal", command=fetch)
     but.update()
 
