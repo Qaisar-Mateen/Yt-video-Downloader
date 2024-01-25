@@ -1,3 +1,4 @@
+from cgitb import text
 from hmac import new
 import threading
 from time import sleep
@@ -150,7 +151,7 @@ def cancel():
     but.configure(text=button_mode, hover_color=button_color_hov, fg_color=button_color, state="normal", command=fetch)
     but.update()
 
-    url.configure(state="normal")
+    url.configure(state="normal", text_color="#C1E4EE")
     url.update()
     url.delete(0, "end")
 
@@ -161,7 +162,7 @@ def fetch_Data(yt_url):
         start_time = time.time()
         print('fetching...')
         yt = YouTube(yt_url)
-        url.configure(state="disabled")
+        url.configure(state="disabled", text_color="#A0B6B6")
         url.update()
         
         global avail_resolutions
@@ -176,7 +177,7 @@ def fetch_Data(yt_url):
 
     except Exception as e:
         print(e)
-        url.configure(state="normal")
+        url.configure(state="normal", text_color="#C1E4EE")
         but.configure(text="Fetch", state="normal")
     
 def fetch():
@@ -204,18 +205,18 @@ if __name__ == "__main__":
     input_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=(5,30))
     input_frame.grid_columnconfigure((0,1), weight=1)
 
-    url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=400)
+    url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=400, )
     url.grid(row=1, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
     but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=fetch)
     but.grid(row=1, column=1, padx=(0, 10), pady=(5, 5), columnspan=1)
     
     dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
     dir.grid(row=3, column=0, padx=(10, 5), pady=(15, 5))
-    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3")
+    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3" )
     browse_but.grid(row=3, column=1, padx=(5, 10), pady=(15, 5))
     
     download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#257EC3", width=200)
-    download_but.grid(row=4, column=0, padx=(10, 0), pady=(40, 15), columnspan=2, sticky="s")
+    download_but.grid(row=4, column=0, padx=(10, 0), pady=(40, 15), columnspan=2)
 
     root.mainloop()
 
