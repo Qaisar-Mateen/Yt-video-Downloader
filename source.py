@@ -1,4 +1,3 @@
-from email.mime import image
 import threading
 import time
 from tracemalloc import start
@@ -21,7 +20,10 @@ size_label = None
 dir = None
 browse_but = None
 steam = None
+combobox = None
 
+is_paused = False
+is_cancelled = False
 filesize = []
 size_str = "SIZE: - MB"
 button_mode = "Fetch"
@@ -198,20 +200,20 @@ def complete(stream, file_handle):
 
 def download_video(url, dir, res, progress, bar):
     try:
+        global is_paused, is_cancelled
         yt = YouTube(url, on_complete_callback=complete)
         stream = yt.streams.filter(progressive=True, file_extension="mp4", resolution=res).first()
         filesize = stream.filesize
         filename = os.path.join(dir, yt.title + ".mp4")
         with open(filename, 'wb') as f:
-            #is_paused = is_cancelled = False
+            is_paused = is_cancelled = False
             stream = request.stream(stream.url) # get an iterable stream
             downloaded = 0
             while True:
-                # if is_cancelled:
-                #     progress['text'] = 'Download cancelled'
-                #     break
-                # if is_paused:
-                #     continue
+                if is_cancelled:
+                    break
+                if is_paused:
+                    continue
                 
                 chunk = next(stream, None) # get next chunk of video
                 if chunk:
@@ -229,29 +231,55 @@ def download_video(url, dir, res, progress, bar):
     except Exception as e:
         print(e)
 
+def cncl_download():
+    global is_cancelled
+    is_cancelled = True
+    download_but.configure(text="Canceling...")
+    download_but.update()
+
+def action(p_but):
+    global is_paused
+    is_paused = not is_paused
+    p_but.configure(image=ctk.CTkImage(Image.open("play.png"), size=(10, 10)) if is_paused else ctk.CTkImage(Image.open("pause.png"), size=(10, 10)))
+    p_but.update()
+
 def download():
     if dir.get() and combobox.get() != "Select Resolution":
-        global bar
         direc = dir.get()
         
         dir.destroy()
         browse_but.destroy()
-
+        combobox.configure(state="disabled")
+        combobox.update()
         but.configure(state="disabled")
         but.update()
         download_but.configure(text="Downloading...", state="disabled")
         download_but.update()
 
         frm = ctk.CTkFrame(input_frame, fg_color="#2B2B2B")
-        frm.grid(row=4, column=0, padx=(10, 0), pady=(15, 30), columnspan=2)
+        frm.grid(row=4, column=0, padx=(6, 0), pady=(0, 10), columnspan=2)
+        
+        lbl = ctk.CTkLabel(frm, text='Location: ' + direc, font=("Arial", 12))
+        lbl.grid(row=0, column=0, padx=(10, 0), pady=(10,4), sticky="w")
+
         bar = ctk.CTkProgressBar(frm, fg_color="#242424", progress_color="#1A5989", width=400, height=18)
-        bar.grid(row=0, column=0, padx=(10,5), pady=0)
+        bar.grid(row=1, column=0, padx=(10,5), pady=(0, 30))
         bar.set(0)
+
         progress = ctk.CTkLabel(frm, text="0%")
-        progress.grid(row=0, column=1, padx=2, pady=0, columnspan=1, sticky = "w")
-        img = ctk.CTkImage(image.open("cancel.png"), size=(20, 20))
-        cancel_but = ctk.CTkButton(frm, image=img, hover_color="#1F6AA5", fg_color="#1A5989")
-        cancel_but.grid(row=1, column=0, padx=2, pady=2, columnspan=1, sticky = "")
+        progress.grid(row=1, column=1, padx=2, pady=(0, 30), columnspan=1, sticky = "w")
+
+        fr = ctk.CTkFrame(frm, fg_color="#2B2B2B")
+        fr.grid(row=1, column=3, padx= 0, pady=0)
+        fr.columnconfigure((0,1), weight=1)
+
+        img = ctk.CTkImage(Image.open("cancel.png"), size=(10, 10))
+        cancel_but = ctk.CTkButton(fr, image=img, text='', command=cncl_download, hover_color="#1F6AA5", fg_color="#1A5989", width=20, height=20)
+        cancel_but.grid(row=0, column=1, padx=10, pady=(0, 30), columnspan=1)
+
+        img = ctk.CTkImage(Image.open("pause.png"), size=(10, 10))
+        p_but = ctk.CTkButton(fr, image=img, text='', hover_color="#1F6AA5", command=lambda: action(p_but), fg_color="#1A5989", width=20, height=20)
+        p_but.grid(row=0, column=0, padx=10, pady=(0, 30), columnspan=1)
 
         print("Started download...")
         threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar)).start()
@@ -265,7 +293,7 @@ if __name__ == "__main__":
 
     # root window settings
     root = ctk.CTk()
-    root.geometry("850x478")
+    root.geometry("875x500")
     root.resizable(False, False)
     root.iconbitmap("icon.ico")
     root.title("YouTube Video Downloader")
