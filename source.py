@@ -1,3 +1,4 @@
+from email.mime import image
 import threading
 import time
 from tracemalloc import start
@@ -248,6 +249,9 @@ def download():
         bar.set(0)
         progress = ctk.CTkLabel(frm, text="0%")
         progress.grid(row=0, column=1, padx=2, pady=0, columnspan=1, sticky = "w")
+        img = ctk.CTkImage(image.open("cancel.png"), size=(20, 20))
+        cancel_but = ctk.CTkButton(frm, image=img, hover_color="#1F6AA5", fg_color="#1A5989")
+        cancel_but.grid(row=1, column=0, padx=2, pady=2, columnspan=1, sticky = "")
 
         print("Started download...")
         threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar)).start()
