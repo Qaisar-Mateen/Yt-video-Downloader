@@ -16,6 +16,8 @@ but = None
 detail_frame = None
 pic_frame = None
 size_label = None
+dir = None
+browse_but = None
 
 filesize = []
 size_str = "SIZE: - MB"
@@ -187,7 +189,7 @@ if __name__ == "__main__":
 
     # root window settings
     root = ctk.CTk()
-    root.geometry("900x506")
+    root.geometry("850x478")
     root.iconbitmap("icon.ico")
     root.title("YouTube Video Downloader")
 
@@ -201,17 +203,15 @@ if __name__ == "__main__":
     input_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=(5,30))
     input_frame.grid_columnconfigure((0,1), weight=1)
 
-    url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=450)
-    url.grid(row=1, column=0, padx=(10, 0), pady=(15, 5))
-
+    url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=400)
+    url.grid(row=1, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
     but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=fetch)
-    but.grid(row=1, column=1, padx=(0, 10), pady=(15, 5))
+    but.grid(row=1, column=1, padx=(0, 10), pady=(5, 5), columnspan=1)
     
-    dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=450)
-    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 5))
-
-    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3")
-    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 5))
+    dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
+    dir.grid(row=3, column=0, padx=(10, 5), pady=(15, 5))
+    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3", command=open_file_dialog())
+    browse_but.grid(row=3, column=1, padx=(5, 10), pady=(15, 5))
     
 
     root.mainloop()
