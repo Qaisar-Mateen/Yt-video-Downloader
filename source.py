@@ -129,7 +129,7 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     size_label = ctk.CTkLabel(detail_frame, text = "SIZE: - MB")
     size_label.grid(row=3, column=0, padx=15, pady=5, sticky="w")
     combobox = ctk.CTkComboBox(detail_frame, values=avail_resolutions, command=update_size, variable=resolution)
-    combobox.configure(dropdown_hover_color="#257EC3", button_color="#1F6AA5", border_color="#1F6AA5", button_hover_color="#257EC3")
+    combobox.configure(dropdown_hover_color="#1F6AA5", button_color="#1A5989", border_color="#1A5989", button_hover_color="#1F6AA5")
     combobox.grid(row=4, column=0, padx=15, pady=5)
     resolution.set("Select Resolution")
     detail_frame.update()
@@ -195,27 +195,9 @@ def Browse():
 def complete(stream, file_handle):
     print("Download completed!")
 
-def prog(f, stream, progress, bar, downloaded):
-    global start_time, ETA
-    bar.stop()
-    chunk = next(stream, None) # get next chunk of video
-    f.write(chunk)  
-    downloaded += len(chunk)
-    str = f'{downloaded / filesize * 100:.2f}%'
-    bar.set(downloaded / filesize)
-    progress.configure(text=str)
-    progress.update()
-    ETA = (start_time - time.time())/100
-    print(f' ETA: {ETA} steps')
-    start_time = time.time()
-    bar.start()
-
 def download_video(url, dir, res, progress, bar):
     try:
-        global start_time, ETA
-        start_time = time.time()
-        ETA = 0.00012
-        yt = YouTube(url, on_complete_callback=complete, on_progress_callback=prog)
+        yt = YouTube(url, on_complete_callback=complete)
         stream = yt.streams.filter(progressive=True, file_extension="mp4", resolution=res).first()
         filesize = stream.filesize
         filename = os.path.join(dir, yt.title + ".mp4")
@@ -223,7 +205,6 @@ def download_video(url, dir, res, progress, bar):
             #is_paused = is_cancelled = False
             stream = request.stream(stream.url) # get an iterable stream
             downloaded = 0
-            bar.start()
             while True:
                 # if is_cancelled:
                 #     progress['text'] = 'Download cancelled'
@@ -231,7 +212,19 @@ def download_video(url, dir, res, progress, bar):
                 # if is_paused:
                 #     continue
                 
-                threading.Thread(target=prog, args=(f, stream, progress, bar, downloaded)).start()           
+                chunk = next(stream, None) # get next chunk of video
+                if chunk:
+                    f.write(chunk)  
+                    downloaded += len(chunk)
+                    str = f'{downloaded / filesize * 100:.1f}%'
+                    bar.set(downloaded / filesize)
+                    progress.configure(text=str)
+                    progress.update()
+        
+                else:
+                    print('done')
+                    break
+
     except Exception as e:
         print(e)
 
@@ -248,11 +241,13 @@ def download():
         download_but.configure(text="Downloading...", state="disabled")
         download_but.update()
 
-        bar = ctk.CTkProgressBar(input_frame, fg_color="#242424", mode="indeterminate", indeterminate_speed=0.00102, progress_color="#1A5989", width=400, height=18)
-        bar.grid(row=4, column=0, padx=10, pady=(10, 30), columnspan=2)
+        frm = ctk.CTkFrame(input_frame, fg_color="#2B2B2B")
+        frm.grid(row=4, column=0, padx=(10, 0), pady=(15, 30), columnspan=2)
+        bar = ctk.CTkProgressBar(frm, fg_color="#242424", progress_color="#1A5989", width=400, height=18)
+        bar.grid(row=0, column=0, padx=(10,5), pady=0)
         bar.set(0)
-        progress = ctk.CTkLabel(input_frame, text="0%")
-        progress.grid(row=3, column=0, padx=10, pady=(20, 5), columnspan=2)
+        progress = ctk.CTkLabel(frm, text="0%")
+        progress.grid(row=0, column=1, padx=2, pady=0, columnspan=1, sticky = "w")
 
         print("Started download...")
         threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar)).start()
