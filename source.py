@@ -1,8 +1,5 @@
-from cgitb import text
-from hmac import new
 import threading
 from time import sleep
-from turtle import st
 import requests
 import time
 import customtkinter as ctk
@@ -24,9 +21,8 @@ browse_but = None
 filesize = []
 size_str = "SIZE: - MB"
 button_mode = "Fetch"
-button_color = "#1F6AA5"
-button_color_hov = "#257EC3"
-
+button_color = "#1A5989"
+button_color_hov = "#1F6AA5"
 
 # def download_video(url, save_path):
 #     try:
@@ -140,8 +136,8 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
 
 def cancel():
     button_mode = "Fetch"
-    button_color = "#1F6AA5"
-    button_color_hov = "#257EC3"
+    button_color = "#1A5989"
+    button_color_hov = "#1F6AA5"
 
     global filesize, avail_resolutions, size_label
     filesize.clear()
@@ -185,6 +181,14 @@ def fetch():
     but.update()
     threading.Thread(target=fetch_Data, args=(url.get(),)).start()
 
+def Browse():
+    # Open the directory selection dialog
+    directory = filedialog.askdirectory()
+
+    # Set the text of the dir entry to the selected directory
+    dir.delete(0, 'end')
+    dir.insert(0, directory)
+
 if __name__ == "__main__":
     
     ctk.set_appearance_mode("dark")
@@ -192,6 +196,7 @@ if __name__ == "__main__":
     # root window settings
     root = ctk.CTk()
     root.geometry("850x478")
+    root.resizable(False, False)
     root.iconbitmap("icon.ico")
     root.title("YouTube Video Downloader")
 
@@ -211,16 +216,15 @@ if __name__ == "__main__":
     but.grid(row=1, column=1, padx=(0, 10), pady=(5, 5), columnspan=1)
     
     dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
-    dir.grid(row=3, column=0, padx=(10, 5), pady=(15, 5))
-    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3" )
-    browse_but.grid(row=3, column=1, padx=(5, 10), pady=(15, 5))
+    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 5))
+    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
+    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 5))
     
-    download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#257EC3", width=200)
+    download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#1F6AA5", fg_color="#1A5989", width=200)
     download_but.grid(row=4, column=0, padx=(10, 0), pady=(40, 15), columnspan=2)
 
     root.mainloop()
 
-    # video_url = input("Please enter a YouTube url: ")
     # save_dir = open_file_dialog()
 
     # if save_dir:
