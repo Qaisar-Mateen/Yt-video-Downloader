@@ -1,10 +1,10 @@
 import threading
-from time import sleep
-import requests
 import time
+import requests
+import os
 import customtkinter as ctk
-from pytube import YouTube
-from tkinter import CURRENT, filedialog
+from pytube import YouTube, request
+from tkinter import filedialog
 from PIL import Image
 
 
@@ -17,6 +17,7 @@ pic_frame = None
 size_label = None
 dir = None
 browse_but = None
+steam = None
 
 filesize = []
 size_str = "SIZE: - MB"
@@ -189,6 +190,55 @@ def Browse():
     dir.delete(0, 'end')
     dir.insert(0, directory)
 
+def download_video(url, dir, res):
+    try:
+        yt = YouTube(url)
+        stream = yt.streams.filter(progressive=True, file_extension="mp4", resolution=res).first()
+        filesize = stream.filesize
+        filename = os.path.join(dir, yt.title + ".mp4")
+        with open(filename, 'wb') as f:
+            #is_paused = is_cancelled = False
+            stream = request.stream(stream.url) # get an iterable stream
+            downloaded = 0
+            while True:
+                # if is_cancelled:
+                #     progress['text'] = 'Download cancelled'
+                #     break
+                # if is_paused:
+                #     continue
+                chunk = next(stream, None) # get next chunk of video
+                if chunk:
+                    f.write(chunk)
+                    downloaded += len(chunk)
+                    # progress['text'] = f'Downloaded {downloaded} / {filesize}'
+                else:
+                    # no more data
+                    # progress['text'] = 'Download completed'
+                    break
+        print('done')
+
+    except Exception as e:
+        print(e)
+
+def download():
+    if dir.get() and combobox.get() != "Select Resolution":
+        global bar
+        direc = dir.get()
+        
+        dir.destroy()
+        browse_but.destroy()
+
+        download_but.configure(text="Downloading...", state="disabled", )
+        download_but.update()
+
+        bar = ctk.CTkProgressBar(input_frame)
+        bar.grid(row=4, column=0, padx=10, pady=(20, 15), columnspan=2)
+        print("Started download...")
+        threading.Thread(target=download_video, args=(url.get(), direc, combobox.get())).start()
+    else:
+        print("Invalid save location or resolution.") 
+
+
 if __name__ == "__main__":
     
     ctk.set_appearance_mode("dark")
@@ -220,15 +270,7 @@ if __name__ == "__main__":
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
     browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 5))
     
-    download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#1F6AA5", fg_color="#1A5989", width=200)
-    download_but.grid(row=4, column=0, padx=(10, 0), pady=(40, 15), columnspan=2)
+    download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#1F6AA5", fg_color="#1A5989", width=200, command=download)
+    download_but.grid(row=5, column=0, padx=(10, 0), pady=(40, 15), columnspan=2)
 
     root.mainloop()
-
-    # save_dir = open_file_dialog()
-
-    # if save_dir:
-    #     print("Started download...")
-    #     download_video(video_url, save_dir)
-    # else:
-    #     print("Invalid save location.")
