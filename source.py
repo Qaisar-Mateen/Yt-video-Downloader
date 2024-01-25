@@ -74,7 +74,10 @@ def empty_window():
 
 def update_size(choice):
     global size_str, filesize, avail_resolutions, size_label
-    size_str = "SIZE: " + str(filesize[avail_resolutions.index(choice)]) + " MB"
+    if(float(filesize[avail_resolutions.index(choice)]) >= 1024):
+        size_str = "SIZE: " + str(format(float(filesize[avail_resolutions.index(choice)])/(1024), '.2f')) + " GB"
+    else:
+        size_str = "SIZE: " + str(filesize[avail_resolutions.index(choice)]) + " MB"
     size_label.configure(text=size_str)
     size_label.update()
 
@@ -90,24 +93,15 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     button_color = "#E20000"
     button_color_hov = "red"
 
-    
-    # img = Image.open(requests.get(thumbnail_url, stream=True).raw)
-    # img.thumbnail((280, 157), Image.LANCZOS)
-
-    # thumbnail_image = ctk.CTkImage(img)
-    # thumbnail_image_label.configure(image=thumbnail_image)
-    # thumbnail_image_label.update()
     img = Image.open(requests.get(thumbnail_url, stream=True).raw)
-
     # Calculate the aspect ratio of the image
     aspect_ratio = img.width / img.height
-
     # Calculate the new size that maintains the aspect ratio
     new_width = 280
     new_height = round(new_width / aspect_ratio)
 
     # If the calculated height is greater than the upper limit of height, recalculate the width instead
-    if new_height > 163:
+    if new_height > 160:
         new_height = 157
         new_width = round(new_height * aspect_ratio)
 
@@ -129,7 +123,7 @@ def update_window(title, author, publish_date, thumbnail_url, avail_resolutions)
     ctk.CTkLabel(detail_frame, text="TITLE: " + trim_string(title, 50)).grid(row=0, column=0, padx=15, pady=5, sticky="w")
     ctk.CTkLabel(detail_frame, text="CHANNEL: " + author).grid(row=1, column=0, padx=15, pady=5, sticky="w")
     ctk.CTkLabel(detail_frame, text="PUBLISH DATE: " + str(publish_date)).grid(row=2, column=0, padx=15, pady=5, sticky="w")
-    size_label = ctk.CTkLabel(detail_frame, text = size_str)
+    size_label = ctk.CTkLabel(detail_frame, text = "SIZE: - MB")
     size_label.grid(row=3, column=0, padx=15, pady=5, sticky="w")
     combobox = ctk.CTkComboBox(detail_frame, values=avail_resolutions, command=update_size, variable=resolution)
     combobox.configure(dropdown_hover_color="#257EC3", button_color="#1F6AA5", border_color="#1F6AA5", button_hover_color="#257EC3")
@@ -145,7 +139,7 @@ def cancel():
     button_color = "#1F6AA5"
     button_color_hov = "#257EC3"
 
-    global filesize, avail_resolutions
+    global filesize, avail_resolutions, size_label
     filesize.clear()
     avail_resolutions.clear()
     size_str = "SIZE: - MB"
@@ -173,7 +167,7 @@ def fetch_Data(yt_url):
             avail_resolutions.append(str(steam.resolution))
             filesize.append(format(steam.filesize / (1024*1024), '.2f'))
 
-        print("TIME: " + str(time.time()-start_time)+"\n " + str(avail_resolutions) + "\n" + str(yt.thumbnail_url))
+        print("TIME: " + str(time.time()-start_time))
         publish_date_str = yt.publish_date.strftime("%d/%m/%Y")
         update_window(yt.title, yt.author, publish_date_str, yt.thumbnail_url, avail_resolutions)
 
@@ -208,10 +202,16 @@ if __name__ == "__main__":
     input_frame.grid_columnconfigure((0,1), weight=1)
 
     url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=450)
-    url.grid(row=0, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
+    url.grid(row=1, column=0, padx=(10, 0), pady=(15, 5))
 
     but = ctk.CTkButton(input_frame, text=button_mode, hover_color=button_color_hov, fg_color=button_color, command=fetch)
-    but.grid(row=0, column=1, padx=(0, 10), pady=(15, 5))
+    but.grid(row=1, column=1, padx=(0, 10), pady=(15, 5))
+    
+    dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=450)
+    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 5))
+
+    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3")
+    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 5))
     
 
     root.mainloop()
