@@ -190,7 +190,7 @@ def Browse():
     dir.delete(0, 'end')
     dir.insert(0, directory)
 
-def download_video(url, dir, res):
+def download_video(url, dir, res, progress, bar):
     try:
         yt = YouTube(url)
         stream = yt.streams.filter(progressive=True, file_extension="mp4", resolution=res).first()
@@ -210,10 +210,12 @@ def download_video(url, dir, res):
                 if chunk:
                     f.write(chunk)
                     downloaded += len(chunk)
-                    # progress['text'] = f'Downloaded {downloaded} / {filesize}'
+                    str = f'{downloaded / filesize * 100:.2f}%'
+                    bar.set(downloaded / filesize)
+                    progress.configure(text=str)
+                    progress.update()
                 else:
                     # no more data
-                    # progress['text'] = 'Download completed'
                     break
         print('done')
 
@@ -228,13 +230,19 @@ def download():
         dir.destroy()
         browse_but.destroy()
 
-        download_but.configure(text="Downloading...", state="disabled", )
+        but.configure(state="disabled")
+        but.update()
+        download_but.configure(text="Downloading...", state="disabled")
         download_but.update()
 
-        bar = ctk.CTkProgressBar(input_frame)
-        bar.grid(row=4, column=0, padx=10, pady=(20, 15), columnspan=2)
+        bar = ctk.CTkProgressBar(input_frame, fg_color="#242424", progress_color="#1A5989", width=400, height=18)
+        bar.grid(row=4, column=0, padx=10, pady=(20, 40), columnspan=2)
+        bar.set(0)
+        progress = ctk.CTkLabel(input_frame, text="0%")
+        progress.grid(row=3, column=0, padx=10, pady=(20, 40), columnspan=2)
+        
         print("Started download...")
-        threading.Thread(target=download_video, args=(url.get(), direc, combobox.get())).start()
+        threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar)).start()
     else:
         print("Invalid save location or resolution.") 
 
@@ -266,11 +274,11 @@ if __name__ == "__main__":
     but.grid(row=1, column=1, padx=(0, 10), pady=(5, 5), columnspan=1)
     
     dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
-    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 5))
+    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 40))
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
-    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 5))
+    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
     
     download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#1F6AA5", fg_color="#1A5989", width=200, command=download)
-    download_but.grid(row=5, column=0, padx=(10, 0), pady=(40, 15), columnspan=2)
+    download_but.grid(row=5, column=0, padx=(10, 0), pady=(5, 15), columnspan=2)
 
     root.mainloop()
