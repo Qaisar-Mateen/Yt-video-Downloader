@@ -1,6 +1,7 @@
 from hmac import new
 import threading
 from time import sleep
+from turtle import st
 import requests
 import time
 import customtkinter as ctk
@@ -210,9 +211,11 @@ if __name__ == "__main__":
     
     dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
     dir.grid(row=3, column=0, padx=(10, 5), pady=(15, 5))
-    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3", command=open_file_dialog())
+    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#257EC3")
     browse_but.grid(row=3, column=1, padx=(5, 10), pady=(15, 5))
     
+    download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#257EC3", width=200)
+    download_but.grid(row=4, column=0, padx=(10, 0), pady=(40, 15), columnspan=2, sticky="s")
 
     root.mainloop()
 
