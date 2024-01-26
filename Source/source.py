@@ -195,13 +195,18 @@ def Browse():
     dir.delete(0, 'end')
     dir.insert(0, directory)
 
-def complete(stream, file_handle):
-    print("Download completed!")
+def complete(dir, bar_frm):
+    bar_frm.destroy()
 
-def download_video(url, dir, res, progress, bar):
+    dir = ctk.CTkEntry(input_frame, placeholder_text=dir, width=400)
+    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 40))
+    browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
+    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
+
+def download_video(url, dir, res, progress, bar, frm):
     try:
         global is_paused, is_cancelled
-        yt = YouTube(url, on_complete_callback=complete)
+        yt = YouTube(url)
         stream = yt.streams.filter(progressive=True, file_extension="mp4", resolution=res).first()
         filesize = stream.filesize
         filename = os.path.join(dir, yt.title + ".mp4")
@@ -211,6 +216,8 @@ def download_video(url, dir, res, progress, bar):
             downloaded = 0
             while True:
                 if is_cancelled:
+                    os.remove(filename)
+                    complete(dir,frm)
                     break
                 if is_paused:
                     download_but.configure(text="Paused")
@@ -228,6 +235,7 @@ def download_video(url, dir, res, progress, bar):
         
                 else:
                     print('done')
+                    complete(dir,frm)
                     break
 
     except Exception as e:
@@ -289,7 +297,7 @@ def download():
         p_but.grid(row=0, column=0, padx=10, pady=(0, 30), columnspan=1)
 
         print("Started download...")
-        threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar)).start()
+        threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar, frm)).start()
     else:
         print("Invalid save location or resolution.") 
 
