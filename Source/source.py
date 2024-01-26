@@ -236,6 +236,7 @@ def download_video(url, dir, res, progress, bar, frm):
                 if chunk:
                     f.write(chunk)  
                     downloaded += len(chunk)
+                    str = ''
                     if filesize < 1024**3:
                         str = f'{downloaded / filesize * 100:.1f}% ({downloaded / (1024 * 1024):.1f}MB/{filesize / (1024 * 1024):.1f}MB)'
                     else:
@@ -294,7 +295,7 @@ def download():
         bar.grid(row=1, column=0, padx=(10,5), pady=(0, 30))
         bar.set(0)
 
-        progress = ctk.CTkLabel(frm)
+        progress = ctk.CTkLabel(frm, text='0% (0MB/0MB)')
         progress.grid(row=1, column=1, padx=2, pady=(0, 30), columnspan=1, sticky = "w")
 
         fr = ctk.CTkFrame(frm, fg_color="#2B2B2B")
