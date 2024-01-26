@@ -199,8 +199,9 @@ def complete(direc, bar_frm):
     bar_frm.destroy()
 
     combobox.configure(state="normal")
-
-    dir = ctk.CTkEntry(input_frame, placeholder_text=direc, width=400)
+    global dir, browse_but
+    dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
+    dir.insert(0, direc)
     dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 40))
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
     browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
