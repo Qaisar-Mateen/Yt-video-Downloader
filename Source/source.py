@@ -198,6 +198,8 @@ def Browse():
 def complete(dir, bar_frm):
     bar_frm.destroy()
 
+    combobox.configure(state="normal")
+
     dir = ctk.CTkEntry(input_frame, placeholder_text=dir, width=400)
     dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 40))
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
@@ -216,7 +218,6 @@ def download_video(url, dir, res, progress, bar, frm):
             downloaded = 0
             while True:
                 if is_cancelled:
-                    os.remove(filename)
                     complete(dir,frm)
                     break
                 if is_paused:
@@ -237,7 +238,8 @@ def download_video(url, dir, res, progress, bar, frm):
                     print('done')
                     complete(dir,frm)
                     break
-
+        if is_cancelled:
+            os.remove(filename)
     except Exception as e:
         print(e)
 
