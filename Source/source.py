@@ -215,9 +215,9 @@ def download_video(url, dir, res, progress, bar, frm):
         filesize = stream.filesize
         filename = os.path.join(dir, yt.title + ".mp4")
         if filesize < 1024**3:
-            progress.configure(text="0% (0MB/" + str(format(filesize / (1024 * 1024), '.2f')) + "MB)")
+            progress.configure(text="0%  (0MB/" + f'{filesize / (1024 * 1024):.2f}MB)')
         else:
-            progress.configure(text="0% (0GB/" + str(format(filesize / (1024**3), '.2f')) + "GB)")
+            progress.configure(text="0%  (0GB/" + f'{filesize / (1024**3):.2f}GB)')
         progress.update()
         with open(filename, 'wb') as f:
             is_paused = is_cancelled = False
@@ -238,9 +238,9 @@ def download_video(url, dir, res, progress, bar, frm):
                     downloaded += len(chunk)
                     str = ''
                     if filesize < 1024**3:
-                        str = f'{downloaded / filesize * 100:.1f}% ({downloaded / (1024 * 1024):.1f}MB/{filesize / (1024 * 1024):.1f}MB)'
+                        str = f'{downloaded / filesize * 100:.1f}%  ({downloaded / (1024 * 1024):.1f}MB/{filesize / (1024 * 1024):.1f}MB)'
                     else:
-                        str = f'{downloaded / filesize * 100:.1f}% ({downloaded / (1024**3):.2f}GB/{filesize / (1024**3):.2f}GB)'
+                        str = f'{downloaded / filesize * 100:.1f}%  ({downloaded / (1024**3):.2f}GB/{filesize / (1024**3):.2f}GB)'
                     
                     bar.set(downloaded / filesize)
                     progress.configure(text=str)
