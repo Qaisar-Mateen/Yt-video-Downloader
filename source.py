@@ -213,6 +213,8 @@ def download_video(url, dir, res, progress, bar):
                 if is_cancelled:
                     break
                 if is_paused:
+                    download_but.configure(text="Paused")
+                    download_but.update()
                     continue
                 
                 chunk = next(stream, None) # get next chunk of video
@@ -242,6 +244,11 @@ def action(p_but):
     is_paused = not is_paused
     p_but.configure(image=ctk.CTkImage(Image.open("play.png"), size=(10, 10)) if is_paused else ctk.CTkImage(Image.open("pause.png"), size=(10, 10)))
     p_but.update()
+    if(is_paused):
+        download_but.configure(text="Pausing...")
+    else:
+        download_but.configure(text="Downloading...")
+    download_but.update()
 
 def download():
     if dir.get() and combobox.get() != "Select Resolution":
