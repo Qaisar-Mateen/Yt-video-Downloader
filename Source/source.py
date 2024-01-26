@@ -205,6 +205,8 @@ def complete(dir, bar_frm):
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
     browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
 
+    download_but.configure(text="Download", state="normal")
+
 def download_video(url, dir, res, progress, bar, frm):
     try:
         global is_paused, is_cancelled
@@ -216,6 +218,7 @@ def download_video(url, dir, res, progress, bar, frm):
             progress.configure(text="0% (0MB/" + str(format(filesize / (1024 * 1024), '.2f')) + "MB)")
         else:
             progress.configure(text="0% (0GB/" + str(format(filesize / (1024**3), '.2f')) + "GB)")
+        progress.update()
         with open(filename, 'wb') as f:
             is_paused = is_cancelled = False
             stream = request.stream(stream.url) # get an iterable stream
