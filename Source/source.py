@@ -195,12 +195,12 @@ def Browse():
     dir.delete(0, 'end')
     dir.insert(0, directory)
 
-def complete(dir, bar_frm):
+def complete(direc, bar_frm):
     bar_frm.destroy()
 
     combobox.configure(state="normal")
 
-    dir = ctk.CTkEntry(input_frame, placeholder_text=dir, width=400)
+    dir = ctk.CTkEntry(input_frame, placeholder_text=direc, width=400)
     dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 40))
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
     browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
