@@ -212,6 +212,10 @@ def download_video(url, dir, res, progress, bar, frm):
         stream = yt.streams.filter(progressive=True, file_extension="mp4", resolution=res).first()
         filesize = stream.filesize
         filename = os.path.join(dir, yt.title + ".mp4")
+        if filesize < 1024**3:
+            progress.configure(text="0% (0MB/" + str(format(filesize / (1024 * 1024), '.2f')) + "MB)")
+        else:
+            progress.configure(text="0% (0GB/" + str(format(filesize / (1024**3), '.2f')) + "GB)")
         with open(filename, 'wb') as f:
             is_paused = is_cancelled = False
             stream = request.stream(stream.url) # get an iterable stream
@@ -229,7 +233,11 @@ def download_video(url, dir, res, progress, bar, frm):
                 if chunk:
                     f.write(chunk)  
                     downloaded += len(chunk)
-                    str = f'{downloaded / filesize * 100:.1f}%'
+                    if filesize < 1024**3:
+                        str = f'{downloaded / filesize * 100:.1f}% ({downloaded / (1024 * 1024):.1f}MB/{filesize / (1024 * 1024):.1f}MB)'
+                    else:
+                        str = f'{downloaded / filesize * 100:.1f}% ({downloaded / (1024**3):.2f}GB/{filesize / (1024**3):.2f}GB)'
+                    
                     bar.set(downloaded / filesize)
                     progress.configure(text=str)
                     progress.update()
@@ -283,7 +291,7 @@ def download():
         bar.grid(row=1, column=0, padx=(10,5), pady=(0, 30))
         bar.set(0)
 
-        progress = ctk.CTkLabel(frm, text="0%")
+        progress = ctk.CTkLabel(frm)
         progress.grid(row=1, column=1, padx=2, pady=(0, 30), columnspan=1, sticky = "w")
 
         fr = ctk.CTkFrame(frm, fg_color="#2B2B2B")
