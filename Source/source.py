@@ -63,7 +63,7 @@ def empty_window():
     pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
 
     # thumbnail image
-    thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(280, 157))
+    thumbnail_image = ctk.CTkImage(Image.open("../Resources/no image.png"), size=(280, 157))
     thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
 
@@ -302,7 +302,7 @@ if __name__ == "__main__":
     root = ctk.CTk()
     root.geometry("875x500")
     root.resizable(False, False)
-    root.iconbitmap("icon.ico")
+    root.iconbitmap("..\Resources\icon.ico")
     root.title("YouTube Video Downloader")
 
     root.grid_columnconfigure(0, weight=1)
