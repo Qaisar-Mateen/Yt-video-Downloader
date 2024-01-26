@@ -197,10 +197,8 @@ def Browse():
 
 def complete(direc, bar_frm):
 
-    for widget in bar_frm.winfo_children():
-        widget.destroy()
     bar_frm.destroy()
-    
+
     combobox.configure(state="normal")
     global dir, browse_but
     dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
