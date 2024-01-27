@@ -1,7 +1,5 @@
 import threading
 import time
-from tracemalloc import start
-from turtle import speed
 import requests
 import os
 import customtkinter as ctk
@@ -21,6 +19,7 @@ dir = None
 browse_but = None
 steam = None
 combobox = None
+error_label = None
 
 is_paused = False
 is_cancelled = False
@@ -31,9 +30,11 @@ button_color = "#1A5989"
 button_color_hov = "#1F6AA5"
 
 
-def show_error(txt, row, col):
-    clb = ctk.CTkLabel(input_frame, text=txt, text_color="#E20000")
-    clb.grid(row=row, column=col, padx=5, pady=5, columnspan=2)
+def show_error(txt):
+    global error_label
+    error_label.configure(text=txt)
+    error_label.update()
+    
 
 def empty_window():
     global detail_frame, pic_frame, thumbnail_image, thumbnail_image_label
@@ -326,6 +327,10 @@ if __name__ == "__main__":
     input_frame = ctk.CTkFrame(root)
     input_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=(5,30))
     input_frame.grid_columnconfigure((0,1), weight=1)
+
+    err_frm = ctk.CTkFrame(input_frame, fg_color="#2B2B2B", border_width=5)
+    err_frm.grid(row=0, column=0, padx=(0), pady=(15, 0), columnspan=2)
+    error_label = ctk.CTkLabel(err_frm, text="", text_color="#E20000")
 
     url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=400, )
     url.grid(row=1, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
