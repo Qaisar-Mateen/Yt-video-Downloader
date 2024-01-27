@@ -22,6 +22,7 @@ combobox = None
 error_label = None
 err_frm = None
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 is_paused = False
 is_cancelled = False
 filesize = []
@@ -62,7 +63,7 @@ def empty_window():
     pic_frame.grid(row=0, column=0, padx=10, pady=(20, 10))
 
     # thumbnail image
-    thumbnail_image = ctk.CTkImage(Image.open("no image.png"), size=(280, 157))
+    thumbnail_image = ctk.CTkImage(Image.open(os.path.join(dir_path, "no image.png")), size=(280, 157))
     thumbnail_image_label = ctk.CTkLabel(pic_frame, image=thumbnail_image, text="")
     thumbnail_image_label.grid(row=0, column=0, padx=25, pady=25)
 
@@ -270,7 +271,7 @@ def cncl_download():
 def action(p_but):
     global is_paused
     is_paused = not is_paused
-    p_but.configure(image=ctk.CTkImage(Image.open("play.png"), size=(10, 10)) if is_paused else ctk.CTkImage(Image.open("pause.png"), size=(10, 10)))
+    p_but.configure(image=ctk.CTkImage(Image.open(os.path.join(dir_path, "play.png")), size=(10, 10)) if is_paused else ctk.CTkImage(Image.open(os.path.join(dir_path, "pause.png")), size=(10, 10)))
     p_but.update()
     if(is_paused):
         download_but.configure(text="Pausing...")
@@ -317,10 +318,12 @@ def download():
         fr.grid(row=1, column=3, padx= 0, pady=0)
         fr.columnconfigure((0,1), weight=1)
 
+        ic_path = os.path.join(dir_path, "cancel.png")
         img = ctk.CTkImage(Image.open("cancel.png"), size=(10, 10))
         cancel_but = ctk.CTkButton(fr, image=img, text='', command=cncl_download, hover_color="#1F6AA5", fg_color="#1A5989", width=20, height=20)
         cancel_but.grid(row=0, column=1, padx=10, pady=(0, 5), columnspan=1)
 
+        ia_path = os.path.join(dir_path, "pause.png") 
         img = ctk.CTkImage(Image.open("pause.png"), size=(10, 10))
         p_but = ctk.CTkButton(fr, image=img, text='', hover_color="#1F6AA5", command=lambda: action(p_but), fg_color="#1A5989", width=20, height=20)
         p_but.grid(row=0, column=0, padx=10, pady=(0, 5), columnspan=1)
@@ -336,7 +339,8 @@ if __name__ == "__main__":
     root = ctk.CTk()
     root.geometry("930x540")
     root.resizable(False, False)
-    root.iconbitmap("icon.ico")
+    icon_path = os.path.join(dir_path, "icon.ico")
+    root.iconbitmap(icon_path)
     root.title("YouTube Video Downloader")
 
     root.grid_columnconfigure(0, weight=1)
