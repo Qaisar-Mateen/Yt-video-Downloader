@@ -19,7 +19,8 @@ dir = None
 browse_but = None
 steam = None
 combobox = None
-
+error_label = None
+err_frm = None
 
 is_paused = False
 is_cancelled = False
@@ -29,16 +30,22 @@ button_mode = "Fetch"
 button_color = "#1A5989"
 button_color_hov = "#1F6AA5"
 
+def trim_string(s, length):
+    if len(s) > length:
+        return s[:length] + "..."
+    else:
+        return s
 
-def show_error(txt, error_label, frm):
-    frm.configure(border_color="#E20000")
-    frm.update()
-    error_label.configure(text=txt)
+def show_error(txt):
+    global error_label, err_frm
+    err_frm.configure(border_color="#E20000")
+    err_frm.update()
+    error_label.configure(text=trim_string(txt, 45))
     error_label.update()
     
     time.sleep(3) # to make msg disapear after 3 sec
-    frm.configure(border_color="#2B2B2B")
-    frm.update()
+    err_frm.configure(border_color="#2B2B2B")
+    err_frm.update()
     error_label.configure(text="")
     error_label.update()
     
@@ -80,12 +87,6 @@ def update_size(choice):
         size_str = "SIZE: " + str(filesize[avail_resolutions.index(choice)]) + " MB"
     size_label.configure(text=size_str)
     size_label.update()
-
-def trim_string(s, length):
-    if len(s) > length:
-        return s[:length] + "..."
-    else:
-        return s
 
 def update_window(title, author, publish_date, thumbnail_url, avail_resolutions):
     
@@ -173,6 +174,14 @@ def fetch_Data(yt_url):
 
     except Exception as e:
         print(e)
+        if "regex_search: could not find match for" in str(e):
+            threading.Thread(target=show_error, args=("Invalid URL",)).start()
+        elif "getaddrinfo failed" in str(e):
+            threading.Thread(target=show_error, args=("No Internet Connection",)).start()
+        elif "unavailable" in str(e):
+            threading.Thread(target=show_error, args=("Can't Process this URL",)).start()
+        else:
+            threading.Thread(target=show_error, args=(str(e),)).start()
         url.configure(state="normal", text_color="#C1E4EE")
         but.configure(text="Fetch", state="normal")
     
@@ -291,11 +300,11 @@ def download():
         lbl.grid(row=0, column=0, padx=(10, 0), pady=(10,4), sticky="w")
 
         bar = ctk.CTkProgressBar(frm, fg_color="#242424", progress_color="#1A5989", width=400, height=18)
-        bar.grid(row=1, column=0, padx=(10,5), pady=(0, 20))
+        bar.grid(row=1, column=0, padx=(10,5), pady=(0, 5))
         bar.set(0)
 
         progress = ctk.CTkLabel(frm, text='0% (0MB/0MB)')
-        progress.grid(row=1, column=1, padx=2, pady=(0, 20), columnspan=1, sticky = "w")
+        progress.grid(row=1, column=1, padx=2, pady=(0, 5), columnspan=1, sticky = "w")
 
         fr = ctk.CTkFrame(frm, fg_color="#2B2B2B")
         fr.grid(row=1, column=3, padx= 0, pady=0)
@@ -303,11 +312,11 @@ def download():
 
         img = ctk.CTkImage(Image.open("cancel.png"), size=(10, 10))
         cancel_but = ctk.CTkButton(fr, image=img, text='', command=cncl_download, hover_color="#1F6AA5", fg_color="#1A5989", width=20, height=20)
-        cancel_but.grid(row=0, column=1, padx=10, pady=(0, 20), columnspan=1)
+        cancel_but.grid(row=0, column=1, padx=10, pady=(0, 5), columnspan=1)
 
         img = ctk.CTkImage(Image.open("pause.png"), size=(10, 10))
         p_but = ctk.CTkButton(fr, image=img, text='', hover_color="#1F6AA5", command=lambda: action(p_but), fg_color="#1A5989", width=20, height=20)
-        p_but.grid(row=0, column=0, padx=10, pady=(0, 20), columnspan=1)
+        p_but.grid(row=0, column=0, padx=10, pady=(0, 5), columnspan=1)
 
         print("Started download...")
         threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar, frm)).start()
@@ -321,7 +330,7 @@ if __name__ == "__main__":
 
     # root window settings
     root = ctk.CTk()
-    root.geometry("900x520")
+    root.geometry("930x540")
     root.resizable(False, False)
     root.iconbitmap("icon.ico")
     root.title("YouTube Video Downloader")
