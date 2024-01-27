@@ -48,8 +48,6 @@ def show_error(txt):
     err_frm.update()
     error_label.configure(text="")
     error_label.update()
-    
-    
 
 def empty_window():
     global detail_frame, pic_frame, thumbnail_image, thumbnail_image_label
@@ -175,13 +173,13 @@ def fetch_Data(yt_url):
     except Exception as e:
         print(e)
         if "regex_search: could not find match for" in str(e):
-            threading.Thread(target=show_error, args=("Invalid URL",)).start()
+            threading.Thread(target=show_error, args=("ERROR: Invalid URL",)).start()
         elif "getaddrinfo failed" in str(e):
-            threading.Thread(target=show_error, args=("No Internet Connection",)).start()
+            threading.Thread(target=show_error, args=("ERROR: No Internet Connection",)).start()
         elif "unavailable" in str(e):
-            threading.Thread(target=show_error, args=("Can't Process this URL",)).start()
+            threading.Thread(target=show_error, args=("ERROR: Can't Process this URL",)).start()
         else:
-            threading.Thread(target=show_error, args=(str(e),)).start()
+            threading.Thread(target=show_error, args=("ERROR: " + str(e),)).start()
         url.configure(state="normal", text_color="#C1E4EE")
         but.configure(text="Fetch", state="normal")
     
@@ -281,7 +279,16 @@ def action(p_but):
     download_but.update()
 
 def download():
-    if dir.get() and combobox.get() != "Select Resolution":
+    if combobox == None:
+        threading.Thread(target=show_error, args=("ERROR: Fetch Video First",)).start()
+
+    elif combobox.get() == "Select Resolution":
+        threading.Thread(target=show_error, args=("ERROR: Select Resolution First",)).start()
+
+    elif dir.get() == "":
+        threading.Thread(target=show_error, args=("ERROR: Select Download Directory",)).start()
+
+    else:
         direc = dir.get()
         
         dir.destroy()
@@ -320,9 +327,6 @@ def download():
 
         print("Started download...")
         threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar, frm)).start()
-    else:
-        print("Invalid save location or resolution.") 
-
 
 if __name__ == "__main__":
     
