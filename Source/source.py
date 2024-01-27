@@ -221,6 +221,7 @@ def download_video(url, dir, res, progress, bar, frm):
         else:
             progress.configure(text="0%  (0GB/" + f'{filesize / (1024**3):.2f}GB)')
         progress.update()
+        
         with open(filename, 'wb') as f:
             is_paused = is_cancelled = False
             stream = request.stream(stream.url) # get an iterable stream
@@ -252,8 +253,10 @@ def download_video(url, dir, res, progress, bar, frm):
                     print('done')
                     complete(dir,frm)
                     break
+
         if is_cancelled:
             os.remove(filename)
+
     except Exception as e:
         print(e)
 
