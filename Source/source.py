@@ -313,7 +313,7 @@ if __name__ == "__main__":
 
     # root window settings
     root = ctk.CTk()
-    root.geometry("875x500")
+    root.geometry("900x520")
     root.resizable(False, False)
     root.iconbitmap("icon.ico")
     root.title("YouTube Video Downloader")
@@ -339,11 +339,9 @@ if __name__ == "__main__":
     but.grid(row=1, column=1, padx=(0, 10), pady=(5, 5), columnspan=1)
     
     dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
-    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 20))
+    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 25))
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
-    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 20))
-    
-    
+    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 25))
 
     download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#1F6AA5", fg_color="#1A5989", width=200, command=download)
     download_but.grid(row=5, column=0, padx=(10, 0), pady=(5, 15), columnspan=2)
