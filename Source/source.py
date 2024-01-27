@@ -19,7 +19,7 @@ dir = None
 browse_but = None
 steam = None
 combobox = None
-error_label = None
+
 
 is_paused = False
 is_cancelled = False
@@ -30,10 +30,18 @@ button_color = "#1A5989"
 button_color_hov = "#1F6AA5"
 
 
-def show_error(txt):
-    global error_label
+def show_error(txt, error_label, frm):
+    frm.configure(border_color="#E20000")
+    frm.update()
     error_label.configure(text=txt)
     error_label.update()
+    
+    time.sleep(3) # to make msg disapear after 3 sec
+    frm.configure(border_color="#2B2B2B")
+    frm.update()
+    error_label.configure(text="")
+    error_label.update()
+    
     
 
 def empty_window():
