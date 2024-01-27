@@ -210,6 +210,7 @@ def complete(direc, bar_frm):
     browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
 
     download_but.configure(text="Download", state="normal")
+    but.configure(state="normal")
 
 def download_video(url, dir, res, progress, bar, frm):
     try:
