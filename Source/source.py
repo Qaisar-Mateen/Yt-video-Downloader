@@ -308,11 +308,11 @@ def download():
         lbl.grid(row=0, column=0, padx=(10, 0), pady=(10,4), sticky="w")
 
         bar = ctk.CTkProgressBar(frm, fg_color="#242424", progress_color="#1A5989", width=400, height=18)
-        bar.grid(row=1, column=0, padx=(10,5), pady=(0, 5))
+        bar.grid(row=1, column=0, padx=(10,5), pady=(1, 5))
         bar.set(0)
 
         progress = ctk.CTkLabel(frm, text='0% (0MB/0MB)')
-        progress.grid(row=1, column=1, padx=2, pady=(0, 5), columnspan=1, sticky = "w")
+        progress.grid(row=1, column=1, padx=2, pady=(1, 5), columnspan=1, sticky = "w")
 
         fr = ctk.CTkFrame(frm, fg_color="#2B2B2B")
         fr.grid(row=1, column=3, padx= 0, pady=0)
@@ -321,12 +321,12 @@ def download():
         ic_path = os.path.join(dir_path, "cancel.png")
         img = ctk.CTkImage(Image.open("cancel.png"), size=(10, 10))
         cancel_but = ctk.CTkButton(fr, image=img, text='', command=cncl_download, hover_color="#1F6AA5", fg_color="#1A5989", width=20, height=20)
-        cancel_but.grid(row=0, column=1, padx=10, pady=(0, 5), columnspan=1)
+        cancel_but.grid(row=0, column=1, padx=10, pady=(1, 5), columnspan=1)
 
         ia_path = os.path.join(dir_path, "pause.png") 
         img = ctk.CTkImage(Image.open("pause.png"), size=(10, 10))
         p_but = ctk.CTkButton(fr, image=img, text='', hover_color="#1F6AA5", command=lambda: action(p_but), fg_color="#1A5989", width=20, height=20)
-        p_but.grid(row=0, column=0, padx=10, pady=(0, 5), columnspan=1)
+        p_but.grid(row=0, column=0, padx=10, pady=(1, 5), columnspan=1)
 
         print("Started download...")
         threading.Thread(target=download_video, args=(url.get(), direc, combobox.get(), progress, bar, frm)).start()
@@ -338,7 +338,7 @@ if __name__ == "__main__":
     # root window settings
     root = ctk.CTk()
     root.geometry("930x540")
-    root.resizable(False, False)
+    #root.resizable(False, False)
     icon_path = os.path.join(dir_path, "icon.ico")
     root.iconbitmap(icon_path)
     root.title("YouTube Video Downloader")
