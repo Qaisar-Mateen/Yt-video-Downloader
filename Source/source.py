@@ -328,9 +328,10 @@ if __name__ == "__main__":
     input_frame.grid(row=1, column=0, sticky="nsew", padx=30, pady=(5,30))
     input_frame.grid_columnconfigure((0,1), weight=1)
 
-    err_frm = ctk.CTkFrame(input_frame, fg_color="#2B2B2B", border_width=5)
+    err_frm = ctk.CTkFrame(input_frame, fg_color="#2B2B2B", border_width=1, border_color="#2B2B2B")
     err_frm.grid(row=0, column=0, padx=(0), pady=(15, 0), columnspan=2)
     error_label = ctk.CTkLabel(err_frm, text="", text_color="#E20000")
+    error_label.grid(row=0, column=0, padx=(10), pady=(5))    
 
     url = ctk.CTkEntry(input_frame, placeholder_text="Enter a YouTube URL", width=400, )
     url.grid(row=1, column=0, padx=(10, 0), pady=(15, 5), columnspan=1)
@@ -338,11 +339,11 @@ if __name__ == "__main__":
     but.grid(row=1, column=1, padx=(0, 10), pady=(5, 5), columnspan=1)
     
     dir = ctk.CTkEntry(input_frame, placeholder_text="Enter Download Directory", width=400)
-    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 40))
+    dir.grid(row=3, column=0, padx=(10, 0), pady=(15, 20))
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
-    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
+    browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 20))
     
-    show_error("Invalid save location or resolution.", 4, 0)
+    
 
     download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#1F6AA5", fg_color="#1A5989", width=200, command=download)
     download_but.grid(row=5, column=0, padx=(10, 0), pady=(5, 15), columnspan=2)
