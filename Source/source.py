@@ -319,12 +319,12 @@ def download():
         fr.columnconfigure((0,1), weight=1)
 
         ic_path = os.path.join(dir_path, "cancel.png")
-        img = ctk.CTkImage(Image.open("cancel.png"), size=(10, 10))
+        img = ctk.CTkImage(Image.open(ic_path), size=(10, 10))
         cancel_but = ctk.CTkButton(fr, image=img, text='', command=cncl_download, hover_color="#1F6AA5", fg_color="#1A5989", width=20, height=20)
         cancel_but.grid(row=0, column=1, padx=10, pady=(1, 5), columnspan=1)
 
         ia_path = os.path.join(dir_path, "pause.png") 
-        img = ctk.CTkImage(Image.open("pause.png"), size=(10, 10))
+        img = ctk.CTkImage(Image.open(ia_path), size=(10, 10))
         p_but = ctk.CTkButton(fr, image=img, text='', hover_color="#1F6AA5", command=lambda: action(p_but), fg_color="#1A5989", width=20, height=20)
         p_but.grid(row=0, column=0, padx=10, pady=(1, 5), columnspan=1)
 
