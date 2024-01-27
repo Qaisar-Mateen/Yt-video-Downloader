@@ -30,25 +30,10 @@ button_mode = "Fetch"
 button_color = "#1A5989"
 button_color_hov = "#1F6AA5"
 
-# def download_video(url, save_path):
-#     try:
-#         yt = YouTube(url)
-#         streams = yt.streams.filter(progressive=True, file_extension="mp4")
-#         res_stream = streams.get_highest_resolution()
-        
-#         if res_stream:
-#             res_stream.download(output_path=save_path)
 
-#         print("Video downloaded successfully!")
-#     except Exception as e:
-#         print(e)
-
-def open_file_dialog():
-    folder = filedialog.askdirectory()
-    if folder:
-        print(f"Selected folder: {folder}")
-
-    return folder
+def show_error(txt, row, col):
+    clb = ctk.CTkLabel(input_frame, text=txt, text_color="#E20000")
+    clb.grid(row=row, column=col, padx=5, pady=5, columnspan=2)
 
 def empty_window():
     global detail_frame, pic_frame, thumbnail_image, thumbnail_image_label
@@ -221,7 +206,7 @@ def download_video(url, dir, res, progress, bar, frm):
         else:
             progress.configure(text="0%  (0GB/" + f'{filesize / (1024**3):.2f}GB)')
         progress.update()
-        
+
         with open(filename, 'wb') as f:
             is_paused = is_cancelled = False
             stream = request.stream(stream.url) # get an iterable stream
@@ -352,6 +337,8 @@ if __name__ == "__main__":
     browse_but = ctk.CTkButton(input_frame, text="Browse...", hover_color="#1F6AA5", fg_color="#1A5989", command=Browse)
     browse_but.grid(row=3, column=1, padx=(0, 10), pady=(15, 40))
     
+    show_error("Invalid save location or resolution.", 4, 0)
+
     download_but = ctk.CTkButton(input_frame, text="Download", hover_color="#1F6AA5", fg_color="#1A5989", width=200, command=download)
     download_but.grid(row=5, column=0, padx=(10, 0), pady=(5, 15), columnspan=2)
 
