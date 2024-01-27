@@ -22,7 +22,7 @@ combobox = None
 error_label = None
 err_frm = None
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = os.path.dirname(os.path.realpath(__file__)) # get current directory path for absolute path
 is_paused = False
 is_cancelled = False
 filesize = []
