@@ -339,7 +339,7 @@ if __name__ == "__main__":
     # root window settings
     root = ctk.CTk()
     root.geometry("930x540")
-    #root.resizable(False, False)
+    root.resizable(False, False)
     icon_path = os.path.join(dir_path, "icon.ico")
     root.iconbitmap(icon_path)
     root.title("YouTube Video Downloader")
